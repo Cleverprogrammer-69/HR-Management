@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-
+import mongooseAggregatePaginate  from "mongoose-aggregate-paginate-v2"
 const employeeSchema = new mongoose.Schema(
   {
     emp_name: {
@@ -43,5 +43,6 @@ const employeeSchema = new mongoose.Schema(
   },
   { timestamps: true }
 );
-
+employeeSchema.pre()
+employeeSchema.plugin(mongooseAggregatePaginate);
 export const Employee = mongoose.model("Employee", employeeSchema)

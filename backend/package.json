@@ -1,0 +1,39 @@
+{
+  "name": "hr-backend",
+  "version": "1.0.0",
+  "description": "the backend written for hr management",
+  "main": "src/index.js",
+  "type": "module",
+  "keywords": [
+    "Javascript",
+    "Backend",
+    "HR Management"
+  ],
+  "scripts": {
+    "start": "node src/index.js",
+    "dev": "nodemon src/index.js"
+  },
+  "author": "Abdullah",
+  "license": "ISC",
+  "dependencies": {
+    "async": "^3.2.5",
+    "bcrypt": "^5.1.1",
+    "cloudinary": "^2.2.0",
+    "cookie-parser": "^1.4.6",
+    "cors": "^2.8.5",
+    "datauri": "^4.1.0",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "jsonwebtoken": "^9.0.2",
+    "mongodb": "^6.8.0",
+    "mongoose": "^8.4.4",
+    "mongoose-aggregate-paginate-v2": "^1.1.1",
+    "multer": "^1.4.5-lts.1",
+    "streamifier": "^0.1.1",
+    "validator": "^13.12.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.4",
+    "prettier": "^3.3.2"
+  }
+}
