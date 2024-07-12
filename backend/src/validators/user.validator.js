@@ -1,7 +1,7 @@
 import validator from "validator";
 import { ApiError } from "../utils/ApiError.js";
 import { User } from "../models/user.models.js";
-async function userRegValidation(userCredentials) {
+async function userRegValidator(userCredentials) {
   const { email, phone, username, password } = userCredentials;
 
   // Validate all fields not to be empty in a single check
@@ -48,7 +48,7 @@ async function userRegValidation(userCredentials) {
 }
 
 
-const userLoginValidation = async (userCredentials) => {
+const userLoginValidator = async (userCredentials) => {
   const { email, username, password } = userCredentials;
 
   // Validate required fields and empty strings
@@ -92,4 +92,4 @@ const userLoginValidation = async (userCredentials) => {
 };
 
 }
-export { userRegValidation, userLoginValidation };
+export { userRegValidator, userLoginValidator };
