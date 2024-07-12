@@ -1,6 +1,6 @@
 import { User } from "../models/user.models.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
-import { userRegValidator, userLoginValidator } from "../validators/user.validator.js";
+import { userRegValidator, userLoginValidator } from "../validators/user.validators.js";
 import { ApiError } from "../utils/ApiError.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 import { uploadToCloudinary } from "../utils/cloudinary.js";
