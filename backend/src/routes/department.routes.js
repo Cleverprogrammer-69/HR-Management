@@ -5,6 +5,6 @@ const router = Router()
 
 router.use(verifyJWT)
 
-router.route("/register").post(registerDepartment)
+router.route("/").post(registerDepartment)
 
 export default router
