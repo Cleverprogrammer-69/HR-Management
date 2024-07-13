@@ -2,7 +2,11 @@ import { Department } from "../models/department.models.js";
 import { ApiError } from "../utils/ApiError.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
-import { departmentIdValidator, departmentRegValidator } from "../validators/department.validators.js";
+import {
+  departmentIdValidator,
+  departmentRegValidator,
+  departmentUpdateValidator,
+} from "../validators/department.validators.js";
 
 const registerDepartment = asyncHandler( async (req, res) => {
     //fetch details from form
@@ -73,4 +77,45 @@ const getOneDepartment = asyncHandler( async (req, res) => {
     )
 })
 
-export { registerDepartment, getAllDepartments, getOneDepartment };
+const updateDepartment = asyncHandler( async (req,res) => {
+    // department id from params validate the id
+
+    const { departmentId } = req.params;
+    // validate the id
+    // find the department with id
+    const departmentFound = await departmentIdValidator(departmentId);
+    // get fields from user
+    const data = req.body
+    // validate the fields
+    await departmentUpdateValidator(data)
+    // if department id is valid then 
+    if (!departmentFound) {
+      throw new ApiError(500, "Something went wrong while fetching department");
+    }
+    // update the department
+    const updatedDepartment = await Department.findByIdAndUpdate(departmentFound._id,
+        {
+            ...data
+        },
+        {
+            new:true
+        }
+    )
+    // res
+    res
+      .status(200)
+      .json(
+        new ApiResponse(
+          200,
+          updatedDepartment,
+          "Department updated successfully"
+        )
+      );
+
+})
+export {
+  registerDepartment,
+  getAllDepartments,
+  getOneDepartment,
+  updateDepartment,
+};

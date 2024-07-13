@@ -29,7 +29,7 @@ const departmentIdValidator = async (departmentId) => {
     if (!mongoose.isValidObjectId(departmentId)){
         throw new ApiError(400, "Invalid department Id")
     }
-    
+
     // check if we have department with that id
 
     const departmentFound = await Department.findById(departmentId)
@@ -39,4 +39,16 @@ const departmentIdValidator = async (departmentId) => {
     return departmentFound
 }
 
-export {departmentRegValidator, departmentIdValidator}
+const departmentUpdateValidator = async (data) => {
+    if (Object.values(data).some(field => {
+        return field?.trim() === "" || !field
+    })){
+        throw new ApiError(400, "Changed fields can't be empty")
+    }
+}
+
+export {
+  departmentRegValidator,
+  departmentIdValidator,
+  departmentUpdateValidator,
+};
