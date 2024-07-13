@@ -1,6 +1,7 @@
 import { Department } from "../models/department.models.js";
 import validator from 'validator'
 import {ApiError} from '../utils/ApiError.js'
+import mongoose, { mongo } from "mongoose";
 
 
 
@@ -22,4 +23,20 @@ const departmentRegValidator = async (departmentCredentials) => {
     return true
 }
 
-export {departmentRegValidator}
+const departmentIdValidator = async (departmentId) => {
+    // check if id is validate mongoose id
+
+    if (!mongoose.isValidObjectId(departmentId)){
+        throw new ApiError(400, "Invalid department Id")
+    }
+    
+    // check if we have department with that id
+
+    const departmentFound = await Department.findById(departmentId)
+    if(!departmentFound){
+        throw new ApiError(404, "Department not found by Id")
+    }
+    return departmentFound
+}
+
+export {departmentRegValidator, departmentIdValidator}
