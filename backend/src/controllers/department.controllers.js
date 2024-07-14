@@ -113,9 +113,31 @@ const updateDepartment = asyncHandler( async (req,res) => {
       );
 
 })
+
+const deleteDepartment = asyncHandler(async (req, res) => {
+    //fetch id of department
+    const { departmentId } = req.params
+    // validate the id
+    const departmentFound = await departmentIdValidator(departmentId); 
+    if (!departmentFound) {
+       throw new ApiError(
+         500,
+         "Something went wrong while fetching department"
+       );
+    }
+    // delete the doc from db
+    const deletedDepartment = await Department.findByIdAndDelete(departmentId)
+    res
+    .status(200)
+    .json(
+        new ApiResponse(200, deletedDepartment, "Successfully deleted the department")
+    )
+})
+
 export {
   registerDepartment,
   getAllDepartments,
   getOneDepartment,
   updateDepartment,
+  deleteDepartment
 };
