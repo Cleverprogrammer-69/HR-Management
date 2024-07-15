@@ -5,7 +5,7 @@ import mongoose, { mongo } from "mongoose";
 
 
 
-const departmentRegValidator = async (departmentCredentials) => {
+const departmentDataValidator = async (departmentCredentials) => {
     const {department, description, hod, abbrevation} = departmentCredentials
     if (Object.values(departmentCredentials).some(field => {
         return field?.trim() === "" || !field
@@ -48,7 +48,7 @@ const departmentUpdateValidator = async (data) => {
 }
 
 export {
-  departmentRegValidator,
+  departmentDataValidator,
   departmentIdValidator,
   departmentUpdateValidator,
 };

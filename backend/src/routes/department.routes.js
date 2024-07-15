@@ -1,5 +1,5 @@
 import { verifyJWT } from "../middlewares/auth.middleware.js"
-import { deleteDepartment, getAllDepartments, getOneDepartment, registerDepartment, updateDepartment } from "../controllers/department.controllers.js"
+import { deleteDepartment, getAllDepartments, getOneDepartment, createDepartment, updateDepartment } from "../controllers/department.controllers.js"
 import { Router } from "express"
 const router = Router()
 
@@ -7,7 +7,7 @@ router.use(verifyJWT)
 
 router
     .route("/")
-    .post(registerDepartment)
+    .post(createDepartment)
     .get(getAllDepartments)
 
 router

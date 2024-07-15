@@ -4,17 +4,17 @@ import { ApiResponse } from "../utils/ApiResponse.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
 import {
   departmentIdValidator,
-  departmentRegValidator,
+  departmentDataValidator,
   departmentUpdateValidator,
 } from "../validators/department.validators.js";
 
-const registerDepartment = asyncHandler( async (req, res) => {
+const createDepartment = asyncHandler( async (req, res) => {
     //fetch details from form
 
     const { department, description, hod, abbrevation, is_active } = req.body
     //validate the info
 
-    await departmentRegValidator({department, description, hod, abbrevation})
+    await departmentDataValidator({department, description, hod, abbrevation})
     //insert new doc in db
 
     const newDepartment = await Department.create({
@@ -135,7 +135,7 @@ const deleteDepartment = asyncHandler(async (req, res) => {
 })
 
 export {
-  registerDepartment,
+  createDepartment,
   getAllDepartments,
   getOneDepartment,
   updateDepartment,
