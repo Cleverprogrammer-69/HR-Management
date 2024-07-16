@@ -50,7 +50,7 @@ const getOneJobType = asyncHandler(async (req, res) => {
 
   const { jobTypeId } = req.params;
   // validate the id
-  // find the department with id
+  // find the Type with id
   const jobTypeFound = await jobTypeIdValidator(jobTypeId);
 
   // if not fetched throw error
@@ -66,21 +66,21 @@ const getOneJobType = asyncHandler(async (req, res) => {
 });
 
 const updateJobType = asyncHandler(async (req, res) => {
-  // department id from params validate the id
+  // Type id from params validate the id
 
   const { jobTypeId } = req.params;
   // validate the id
-  // find the department with id
+  // find the Type with id
   const jobTypeFound = await jobTypeIdValidator(jobTypeId);
   // get fields from user
   const data = req.body;
   // validate the fields
   await jobTypeUpdateValidator(data);
-  // if department id is valid then
+  // if Type id is valid then
   if (!jobTypeFound) {
     throw new ApiError(500, "Something went wrong while fetching jobType");
   }
-  // update the department
+  // update the Type
   const updatedJobType = await JobType.findByIdAndUpdate(
     jobTypeFound._id,
     {
@@ -103,7 +103,7 @@ const updateJobType = asyncHandler(async (req, res) => {
 });
 
 const deleteJobType = asyncHandler(async (req, res) => {
-  //fetch id of department
+  //fetch id of Type
   const { jobTypeId } = req.params;
   // validate the id
   const jobTypeFound = await jobTypeIdValidator(jobTypeId);

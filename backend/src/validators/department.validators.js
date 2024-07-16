@@ -17,7 +17,7 @@ const departmentDataValidator = async (departmentCredentials) => {
         $or:[{ department }, { hod }, { abbrevation }]
     })
     if (existingDepartment){
-        throw new ApiError(409, "deparment name or hod or abbrevation is alread in use.")
+        throw new ApiError(409, "deparment name or hod or abbrevation is already in use.")
     }
 
     return true
