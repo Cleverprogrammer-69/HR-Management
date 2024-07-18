@@ -2,10 +2,10 @@ import { Router } from "express";
 import { verifyJWT } from "../middlewares/auth.middleware.js";
 import {
   createEmployee,
+  deleteEmployee,
   getAllEmployees,
-//   deleteJobType,
-//   getAllJobTypes,
   getOneEmployee,
+  updateEmployee,
 //   updateJobType,
 } from "../controllers/employee.controllers.js";
 import { upload } from "../middlewares/multer.middleware.js";
@@ -21,7 +21,7 @@ router
 router
   .route("/:employeeId")
   .get(getOneEmployee)
-//   .patch(updateJobType)
-//   .delete(deleteJobType);
+  .patch(updateEmployee)
+  .delete(deleteEmployee);
 
 export default router;

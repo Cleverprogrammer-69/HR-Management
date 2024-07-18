@@ -2,7 +2,7 @@ import { Employee } from "../models/employee.models.js";
 import mongoose from "mongoose";
 import validator from "validator";
 import {asyncHandler } from '../utils/asyncHandler.js'
-import { employeeDataValidator, employeeIdValidator } from "../validators/employee.validators.js";
+import { employeeDataValidator, employeeIdValidator, employeeUpdateValidator } from "../validators/employee.validators.js";
 import { ApiError } from "../utils/ApiError.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 const createEmployee = asyncHandler( async (req,res) => {
@@ -25,7 +25,6 @@ const createEmployee = asyncHandler( async (req,res) => {
       emp_name,
       phone,
       nic,
-    //   email: email && email,
       prof_qualification,
       father,
       emp_department,
@@ -33,6 +32,7 @@ const createEmployee = asyncHandler( async (req,res) => {
       emp_type,
       emp_nature,
     });
+
     if(email){
         if(!validator.isEmail(email)){
             throw new ApiError(400, "Invalid email")
@@ -72,9 +72,11 @@ const createEmployee = asyncHandler( async (req,res) => {
     });
 
     const createdEmployee = await Employee.findById(newEmployee._id)
+    
     if(!createdEmployee){
         throw new ApiError(500, "Something went wrong while creating employee"+createdEmployee)
     }
+
     res.status(201).json(
         new ApiResponse(201, createdEmployee, "Employee created successfully")
     )
@@ -82,9 +84,11 @@ const createEmployee = asyncHandler( async (req,res) => {
 
 const getAllEmployees = asyncHandler( async (_, res) => {
     const employees = await Employee.find().populate("emp_department").sort({createdAt: -1})
+
     if(!employees){
         throw new ApiError(500, "Something went wrong while fetching all employees")
     }
+
     res
     .status(200)
     .json(
@@ -94,10 +98,13 @@ const getAllEmployees = asyncHandler( async (_, res) => {
 
 const getOneEmployee = asyncHandler( async(req, res) => {
     const { employeeId } = req.params
+
     const employee = await employeeIdValidator(employeeId)
+
     if(!employee){
         throw new ApiError(500, "something went wrong while fetch employee")
     }
+
     res
     .status(200)
     .json(
@@ -105,4 +112,66 @@ const getOneEmployee = asyncHandler( async(req, res) => {
     )
 })
 
-export { createEmployee, getAllEmployees, getOneEmployee }
+const deleteEmployee = asyncHandler( async (req, res) => {
+    const { employeeId } = req.params
+
+    const employee = await employeeIdValidator(employeeId)
+    
+    if(!employee){
+        throw new ApiError(500, "something went wrong while fetch employee")
+    }
+
+    const deletedEmployee = await Employee.findByIdAndDelete(employeeId)
+    
+    if(!deletedEmployee){
+        throw new ApiError(500, "Something went wrong while deleting employee")
+    }
+
+    res
+    .status(200)
+    .json(
+        new ApiResponse(200, deletedEmployee, "Employee fetched successfully")
+    )
+})
+
+const updateEmployee = asyncHandler( async ( req, res ) => {
+    const {employeeId} = req.params
+
+    const employee = await employeeIdValidator(employeeId)
+
+    if(!employee){
+        throw new ApiError(500, "Something went wrong while fetching employee")
+    }
+
+    await employeeUpdateValidator(req.body)
+
+    const updatedEmployee = await Employee.findByIdAndUpdate(
+        employeeId,
+        {
+            ...req.body
+        },
+        {
+            new: true
+        }
+    )
+
+    if(!updatedEmployee){
+        throw new ApiError(500, "Something went wrong while updating the employee")
+    }
+
+    res
+    .status(200)
+    .json(
+        new ApiResponse(200, updatedEmployee, "Employee updated Successfully")
+    )
+
+})
+
+
+export { 
+    createEmployee,
+    getAllEmployees,
+    getOneEmployee, 
+    deleteEmployee, 
+    updateEmployee 
+}
