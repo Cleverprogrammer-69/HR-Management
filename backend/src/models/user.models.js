@@ -25,7 +25,7 @@ const userSchema = new mongoose.Schema(
     full_name:{
       type:String,
       required: true,
-      get(){
+      default: function get(){
         return this.username
       },
     },

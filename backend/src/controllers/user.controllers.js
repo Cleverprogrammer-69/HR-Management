@@ -14,7 +14,7 @@ import { getAccessAndRefreshTokens } from "../utils/tokenGenerator.js"
 const registerUser = asyncHandler(async (req, res) => {
   const { email, phone, password, username, full_name } = req.body;
   //validation of data 👇
-  await userRegValidator({ email, phone, username, password });
+  await userRegValidator({ email, phone, username, password, full_name });
   let avatar;
 
   if (req.file?.buffer) {
