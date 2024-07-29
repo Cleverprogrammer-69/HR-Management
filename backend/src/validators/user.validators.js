@@ -49,41 +49,41 @@ async function userRegValidator(userCredentials) {
 
 
 const userLoginValidator = async (userCredentials) => {
-  const { email, username, password } = userCredentials;
+  const { identifier, password } = userCredentials;
 
   // Validate required fields and empty strings
-  if (!email && !username) {
-    throw new ApiError(400, "Username or email is required to login");
+  if (!identifier ) {
+    throw new ApiError(400, "Username or email is required to login.");
   }
 
   if (!password) {
-    throw new ApiError(401, "Password is required to login");
+    throw new ApiError(401, "Password is required to login.");
   }
 
-  if (!email?.trim() && !username?.trim()) {
-    throw new ApiError(400, "Credentials cannot be empty spaces");
+  if (!identifier?.trim()) {
+    throw new ApiError(400, "Credentials cannot be empty spaces.");
   }
   if (!password?.trim()) {
-    throw new ApiError(401, "Password can't be empty");
+    throw new ApiError(401, "Password can't be empty.");
   }
   try {
    
     const user = await User.findOne({
       $or: [
-        { username: { $regex: new RegExp(username?.trim(), "i") } }, 
-        { email: { $regex: new RegExp(email?.trim(), "i") } }, 
+        { username: { $regex: new RegExp(identifier?.trim(), "i") } }, 
+        { email: { $regex: new RegExp(identifier?.trim(), "i") } }, 
       ],
     });
 
     if (!user) {
-      throw new ApiError(404, "User not found with the provided credentials");
+      throw new ApiError(404, "User not found with the provided credentials.");
     }
 
     
     const isPasswordCorrect = await user.isPasswordCorrect(password);
 
     if (!isPasswordCorrect) {
-      throw new ApiError(401, "Invalid password");
+      throw new ApiError(401, "Invalid password.");
     }
 
     return user;

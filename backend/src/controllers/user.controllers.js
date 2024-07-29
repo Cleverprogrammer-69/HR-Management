@@ -20,7 +20,7 @@ const registerUser = asyncHandler(async (req, res) => {
   if (req.file?.buffer) {
     avatar = await uploadToCloudinary(req);
     if (!avatar) {
-      throw new ApiError(400, "Error uploading to Cloudinary");
+      throw new ApiError(400, "Error uploading to Cloudinary.");
     }
   }
 
@@ -43,17 +43,17 @@ const registerUser = asyncHandler(async (req, res) => {
 
   return res
     .status(201)
-    .json(new ApiResponse(201, createdUser, "User registered successfully"));
+    .json(new ApiResponse(201, createdUser, "User registered successfully."));
 });
 
 
 
 const loginUser = asyncHandler(async(req,res)=>{
-    const {email, username, password} = req.body
+    const {identifier, password} = req.body
     //validation
-    let user = await userLoginValidator({email, username, password})
+    let user = await userLoginValidator({identifier, password})
     if(!user){
-      throw new ApiError(401, "User is not authenticated")
+      throw new ApiError(401, "User is not authenticated.")
     }
     let {accessToken, refreshToken}= await getAccessAndRefreshTokens(user._id)
 
@@ -69,7 +69,7 @@ const loginUser = asyncHandler(async(req,res)=>{
         new ApiResponse (200,{
           user: loggedInUser, refreshToken, accessToken
         },
-        "User loggedIn successfully"
+        "User logged In successfully."
 
       )
       )
@@ -104,7 +104,7 @@ const refreshAccessToken = asyncHandler(async(req, res) =>{
   let incomingRefreshToken = req.cookies.refreshToken || req.body.refreshToken
   
   if(!incomingRefreshToken){
-    throw new ApiError(401, "Unauthorized access")
+    throw new ApiError(401, "Unauthorized access.")
   }
 
 try {
@@ -114,11 +114,11 @@ try {
     );
     let user = await User.findById(decodedToken._id)
     if(!user){
-      throw new ApiError(401,"Invalid Token")
+      throw new ApiError(401,"Invalid Token.")
     }
   
     if(incomingRefreshToken !== user?.refreshToken){
-      throw new ApiError(401, "Refresh token is used or expired")
+      throw new ApiError(401, "Refresh token is used or expired.")
     }
   
     const {newRefreshToken, accessToken} = await getAccessAndRefreshTokens(user?._id)
@@ -134,7 +134,7 @@ try {
         refreshToken: newRefreshToken,
         accessToken: accessToken
       },
-      "Access Token Refreshed"
+      "Access Token Refreshed."
      )
     )
 } catch (error) {
