@@ -1,5 +1,6 @@
 "use client"; // Required for client-side components in Next.js 13+
 
+import { useState } from 'react'
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import axios from "axios";
@@ -15,10 +16,12 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { toast } from "@/components/ui/use-toast";
-import { extractErrorMessage } from "@/lib/extractErrorMsg";
-
+import { EyeIcon, EyeOffIcon } from "lucide-react";
+import { loginUser } from "@/lib/store/features/user/authSlice";
+import { useRouter } from 'next/navigation';
+import { useAppDispatch, useAppSelector } from '@/lib/hooks/hooks';
 const FormSchema = z.object({
-  identifier: z.string().min(2, {
+  identifier: z.string().trim().min(2, {
     message: "Identifier must be 2 characters.",
   }),
   password: z.string().min(8, {
@@ -26,8 +29,11 @@ const FormSchema = z.object({
   }),
 });
 
-export default function InputForm() {
-  
+export default function Login() {
+  const dispatch = useAppDispatch()
+  const [passwordVisible, setPasswordVisible] = useState(false); 
+  const {status, error, user} = useAppSelector(state => state.auth)
+  const router = useRouter()
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
@@ -35,46 +41,32 @@ export default function InputForm() {
       password: "",
     },
   });
-
- 
-  const URL = "http://localhost:4000/api/v1";
-
   
   async function onSubmit(data: z.infer<typeof FormSchema>) {
     console.log("Form Data Submitted:", data); 
     try {
-     
-      const response = await axios.post(`${URL}/user/login`, data, {
-        withCredentials: true,
-      });
-
-      // Handle successful response
-      if (response.status >= 200 && response.status < 300) {
-        console.log("API Response:", response.data[0]); 
-        toast({
-          title: "Login successful!",
-          description: "You have successfully Logged in.",
-          variant: "default",
-        });
-      }
-    } catch (error: any | never ) {
-      const errorMsg = extractErrorMessage(error.response?.data);
-      console.error("API Error:", errorMsg);
-
+      const User = await dispatch(loginUser(data)).unwrap();
+      // console.log(User)
       toast({
-        title: "Login failed!",
-        description:
-          errorMsg || "An error occurred during login.",
-        variant: "destructive", 
-      });
+        variant: "default",
+        title: "Login Successful",
+        description: "Redirecting to home page."
+      })
+      router.push('/')
+      } catch (e) {
+      console.log(e)
+      toast({
+        title: "Login Failed",
+        description: e as string,
+        variant: "destructive"
+      })
     }
   }
-
   return (
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="w-screen space-y-6 mx-auto bg-card p-9 h-screen md:w-2/5 md:h-2/3 md:mt-20 md:rounded-lg"
+        className="w-screen space-y-4 mx-auto bg-card p-9 h-screen md:w-2/5 md:h-2/3 md:mt-20 md:rounded-lg"
       >
         <h2 className="mt-0 font-extrabold text-xl">Login to your account</h2>
         {/* Email field */}
@@ -91,7 +83,7 @@ export default function InputForm() {
             </FormItem>
           )}
         />
-       
+
         {/* Password field */}
         <FormField
           control={form.control}
@@ -99,9 +91,26 @@ export default function InputForm() {
           render={({ field }) => (
             <FormItem>
               <FormLabel>Password</FormLabel>
-              <FormControl>
-                <Input type="password" placeholder="password" {...field} />
-              </FormControl>
+              <div className="relative">
+                <FormControl>
+                  <Input
+                    type={passwordVisible ? 'text' : 'password'}
+                    placeholder="password"
+                    {...field}
+                  />
+                </FormControl>
+                <button
+                  type="button"
+                  className="absolute inset-y-0 right-0 flex items-center pr-3 text-foreground"
+                  onClick={() => setPasswordVisible(!passwordVisible)}
+                >
+                  {passwordVisible ? (
+                    <EyeOffIcon className="h-5 w-5" aria-hidden="true" />
+                  ) : (
+                    <EyeIcon className="h-5 w-5" aria-hidden="true" />
+                  )}
+                </button>
+              </div>
               <FormMessage />
             </FormItem>
           )}

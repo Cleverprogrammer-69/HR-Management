@@ -1,52 +1,117 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import axios from "axios";
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import axios from 'axios';
+import { extractErrorMessage } from '@/lib/extractErrorMsg';
 
-const URL = "https://localhost:4000/api/v1";
-
-export const signup = createAsyncThunk(
-  "user/signup",
-  async (userCredentials, { rejectWithValue }) => {
+const initialState = {
+  user: null,
+  status: 'idle',
+  error: null,
+};
+const URL = process.env.HR_API_V1
+export const signupUser = createAsyncThunk(
+  'auth/signupUser',
+  async (userData, thunkAPI) => {
     try {
-      const response = await axios.post(`${URL}/user/register`, userCredentials, {
+      const response = await axios.post(`${URL}/user/register`, userData, {
         withCredentials: true,
       });
 
-      if (response.status < 400) {
-        return response.data;
-      } else {
-        return rejectWithValue("Failed to sign up. Please try again.");
-      }
+      return response.data;
     } catch (error: any) {
-      return rejectWithValue(
-        error.response?.data || "An error occurred during signup."
-      );
+      const errorMsg = extractErrorMessage(error.response?.data);
+      return thunkAPI.rejectWithValue(errorMsg || 'An error occurred during signup.');
     }
   }
 );
 
-export const authSlice = createSlice({
-  name: "auth",
-  initialState: {
-    loading: false,
-    error: null,
-    user: null,
+export const loginUser = createAsyncThunk(
+  'auth/loginUser',
+  async (userData, thunkAPI) => {
+    try {
+      const response = await axios.post(
+        `${URL}/user/login`,
+        userData,
+        {
+          withCredentials: true,
+        }
+      );
+
+      return response.data;
+    } catch (error: any) {
+      const errorMsg = extractErrorMessage(error.response?.data);
+      return thunkAPI.rejectWithValue(errorMsg || 'An error occurred during signup.');
+    }
+  }
+);
+
+export const logoutUser = createAsyncThunk(
+  "auth/logoutUser",
+  async (_, thunkAPI)=>{
+    try {
+      const response = await axios.post(
+        `${URL}/user/logout`,
+        {},
+        {withCredentials:true},
+      )
+      console.log(response.data)
+      return response.data
+    } catch (error : any) {
+      const errorMsg = extractErrorMessage(error.response?.data)
+      return thunkAPI.rejectWithValue(
+        errorMsg || 'An error occurred during logout.'
+      );
+    }
+  }
+)
+
+const authSlice = createSlice({
+  name: 'auth',
+  initialState,
+  reducers: {
   },
-  reducers: {},
   extraReducers: (builder) => {
     builder
-      .addCase(signup.pending, (state) => {
-        state.loading = true;
+      .addCase(signupUser.pending, (state) => {
+        state.status = 'loading';
         state.error = null;
       })
-      .addCase(signup.fulfilled, (state, action) => {
-        state.loading = false;
+      .addCase(signupUser.fulfilled, (state, action) => {
+        state.status = 'succeeded';
         state.user = action.payload;
         state.error = null;
       })
-      .addCase(signup.rejected, (state, action: any) => {
-        state.loading = false;
+      .addCase(signupUser.rejected, (state, action: any) => {
+        state.status = 'failed';
         state.error = action.payload;
-      });
+      })
+      
+      .addCase(loginUser.pending, (state) => {
+        state.status = 'loading';
+        state.error = null;
+      })
+      .addCase(loginUser.fulfilled, (state, action) => {
+        state.status = 'succeeded';
+        state.user = action.payload;
+        state.error = null;
+      })
+      .addCase(loginUser.rejected, (state, action: any) => {
+        state.status = 'failed';
+        state.error = action.payload;
+      })
+
+      .addCase(logoutUser.pending, (state) => {
+        state.status = 'loading';
+        state.error = null;
+      })
+      .addCase(logoutUser.fulfilled, (state, action) => {
+        state.status = 'succeeded';
+        state.user = action.payload;
+        state.error = null;
+      })
+      .addCase(logoutUser.rejected, (state, action : any) => {
+        state.status = 'failed';
+        state.error = action.payload;
+      })
   },
 });
 
