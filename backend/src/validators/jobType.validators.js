@@ -22,7 +22,7 @@ const jobTypeDataValidator = async (jobTypeCredentials) => {
 const jobTypeIdValidator = async (jobTypeId) => {
   // check if id is validate mongoose id
 
-  if (!mongoose.isValidObjectId(jobTypeId)) {
+  if (!validator.isNumeric(jobTypeId)) {
     throw new ApiError(400, "Invalid jobType Id");
   }
 

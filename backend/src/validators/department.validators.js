@@ -26,7 +26,7 @@ const departmentDataValidator = async (departmentCredentials) => {
 const departmentIdValidator = async (departmentId) => {
     // check if id is validate mongoose id
 
-    if (!mongoose.isValidObjectId(departmentId)){
+    if (!validator.isNumeric(departmentId)){
         throw new ApiError(400, "Invalid department Id")
     }
 

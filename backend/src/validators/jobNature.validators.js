@@ -23,7 +23,7 @@ const jobNatureDataValidator = async (jobNatureCredentials) => {
 const jobNatureIdValidator = async (jobNatureId) => {
   // check if id is validate mongoose id
 
-  if (!mongoose.isValidObjectId(jobNatureId)) {
+  if (!validator.isNumeric(jobNatureId)) {
     throw new ApiError(400, "Invalid jobnature Id");
   }
 

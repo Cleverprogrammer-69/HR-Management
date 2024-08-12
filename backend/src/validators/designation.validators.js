@@ -29,7 +29,7 @@ const designationDataValidator = async (designationCredentials) => {
 const designationIdValidator = async (designationId) => {
   // check if id is validate mongoose id
 
-  if (!mongoose.isValidObjectId(designationId)) {
+  if (!validator.isNumeric(designationId)) {
     throw new ApiError(400, "Invalid designation Id");
   }
 

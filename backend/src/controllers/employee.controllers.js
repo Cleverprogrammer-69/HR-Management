@@ -83,7 +83,26 @@ const createEmployee = asyncHandler( async (req,res) => {
 })
 
 const getAllEmployees = asyncHandler( async (_, res) => {
-    const employees = await Employee.find().populate("emp_department").sort({createdAt: -1})
+    const employees = await Employee.find()
+      .populate([
+        {
+          path: "emp_department",
+          select: "department",
+        },
+        {
+          path: "emp_designation",
+          select: "designation",
+        },
+        {
+          path: "emp_type",
+          select: "job_type",
+        },
+        {
+          path: "emp_nature",
+          select: "job_nature",
+        },
+      ])
+      .sort({ createdAt: -1 });
 
     if(!employees){
         throw new ApiError(500, "Something went wrong while fetching all employees")

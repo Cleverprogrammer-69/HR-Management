@@ -50,22 +50,22 @@ const employeeSchema = new mongoose.Schema(
       type: String,
     },
     emp_department: {
-      type: mongoose.Schema.Types.ObjectId,
+      type: Number,
       ref: "Department",
       required: true,
     },
     emp_designation: {
-      type: mongoose.Schema.Types.ObjectId,
+      type: Number,
       ref: "Designation",
       required: true,
     },
     emp_type: {
-      type: mongoose.Schema.Types.ObjectId,
+      type: Number,
       ref: "JobType",
       required: true,
     },
     emp_nature: {
-      type: mongoose.Schema.Types.ObjectId,
+      type: Number,
       ref: "JobNature",
       required: true,
     },
