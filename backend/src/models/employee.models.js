@@ -23,13 +23,16 @@ const employeeSchema = new mongoose.Schema(
       type: String,
       trim: true,
       lowercase: true,
-      default: function get(){
-        return `${this.emp_name}${this.phone}@gmail.com`
+      set: function (value) {
+        return value === "" ? undefined : value;
       },
-      unique: true
+      default: function get() {
+        return `${this.emp_name}${this.phone}@gmail.com`;
+      },
+      unique: true,
     },
     phone: {
-      type: Number,
+      type: String,
       default: 0,
       unique: true,
       trim: true,
@@ -48,6 +51,10 @@ const employeeSchema = new mongoose.Schema(
     },
     tech_skill: {
       type: String,
+      set: function (value) {
+        return value === "" ? undefined : value;
+      },
+      default: "none",
     },
     emp_department: {
       type: Number,
