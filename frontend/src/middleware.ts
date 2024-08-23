@@ -26,7 +26,7 @@ export async function middleware(req: NextRequest) {
   return NextResponse.next();
 }
 export const config = {
-  matcher: ['/signup', '/login', '/'],
+  matcher: ['/signup', '/login', '/', '/employee', '/employee/:path*'],
 };
 function decodeToken(token: string | undefined): boolean {
   try {

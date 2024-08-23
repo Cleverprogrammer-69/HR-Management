@@ -1,4 +1,4 @@
-"use client"; // Required for client-side components in Next.js 13+
+"use client";
 
 import { useState } from 'react'
 import { useForm } from "react-hook-form";
@@ -20,6 +20,7 @@ import { EyeIcon, EyeOffIcon } from "lucide-react";
 import { loginUser } from "@/lib/store/features/user/authSlice";
 import { useRouter } from 'next/navigation';
 import { useAppDispatch, useAppSelector } from '@/lib/hooks/hooks';
+import Link from 'next/link';
 const FormSchema = z.object({
   identifier: z.string().trim().min(2, {
     message: "Identifier must be 2 characters.",
@@ -69,6 +70,15 @@ export default function Login() {
         className="w-screen space-y-4 mx-auto bg-card p-9 h-screen md:w-2/5 md:h-2/3 md:mt-20 md:rounded-lg"
       >
         <h2 className="mt-0 font-extrabold text-xl">Login to your account</h2>
+        <div className="mt-2 p-0">
+          <span className="font-semibold text-sm text-foreground">
+            Don't have an account?{' '}
+          </span>
+          <Link href={'/signup'} className="text-primary ml-1 font-bold underline">
+            Sign Up
+          </Link>
+        </div>
+
         {/* Email field */}
         <FormField
           control={form.control}
@@ -77,7 +87,7 @@ export default function Login() {
             <FormItem>
               <FormLabel>Username or Email</FormLabel>
               <FormControl>
-                <Input placeholder="username or email" {...field} />
+                <Input placeholder="username or email" {...field} className='bg-input' />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -96,7 +106,8 @@ export default function Login() {
                   <Input
                     type={passwordVisible ? 'text' : 'password'}
                     placeholder="password"
-                    {...field}
+                    {...field} 
+                    className='bg-input'
                   />
                 </FormControl>
                 <button
@@ -115,7 +126,7 @@ export default function Login() {
             </FormItem>
           )}
         />
-        <Button type="submit" className="w-full">
+        <Button type="submit" className="w-full" disabled={status === 'loading' || status === 'success'}>
           Login
         </Button>
       </form>

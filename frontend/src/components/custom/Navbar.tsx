@@ -1,3 +1,4 @@
+'use client'
 import React from 'react';
 import Link from 'next/link';
 import { useAppDispatch, useAppSelector } from '@/lib/hooks/hooks';
@@ -14,8 +15,8 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { useRouter } from 'next/navigation';
-
+import { redirect, useRouter } from 'next/navigation';
+import { Redirect } from 'next';
 
 export default function Navbar() {
   const dispatch = useAppDispatch()
@@ -26,11 +27,12 @@ export default function Navbar() {
     dispatch(toggleSideBar());
   };
   const handleLogout = () => {
-    dispatch(logoutUser());
     router.push('/login')
+    dispatch(logoutUser());
+    
   }
   return (
-    <nav className="bg-card dark:bg-background py-2 px-3 flex justify-between items-center">
+    <nav className="fixed w-full bg-card dark:bg-background py-2 px-3 flex justify-between items-center z-50">
       <button className="text-foreground" onClick={handleToggleSideBar}>
         {sideBarOpen ? (
           <ArrowLeftFromLine className="text-destructive" />

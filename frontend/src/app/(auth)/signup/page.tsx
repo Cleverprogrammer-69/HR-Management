@@ -20,6 +20,7 @@ import { z } from 'zod';
 import { signupUser } from '@/lib/store/features/user/authSlice';
 import { useAppDispatch } from '@/lib/hooks/hooks';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 
 const FormSchema = z.object({
   username: z.string().trim().min(2, {
@@ -84,9 +85,20 @@ export default function Signup() {
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="w-screen space-y-3 mx-auto bg-card p-9 h-[120vh] md:w-2/5 md:h-2/3 md:mt-10 md:rounded-lg"
+        className="w-screen space-y-3 mx-auto bg-card p-9 h-[130vh] md:w-2/5 md:h-2/3 md:mt-10 md:rounded-lg"
       >
         <h2 className="mt-0 font-extrabold text-xl">Create your account</h2>
+        <div className="mt-2 p-0">
+          <span className="font-semibold text-sm text-foreground">
+            Have an account?{' '}
+          </span>
+          <Link
+            href={'/login'}
+            className="text-primary ml-1 font-bold underline"
+          >
+            Log in now
+          </Link>
+        </div>
         {/* Email field */}
         <FormField
           control={form.control}
@@ -95,7 +107,7 @@ export default function Signup() {
             <FormItem>
               <FormLabel>Email</FormLabel>
               <FormControl>
-                <Input placeholder="john122@yahoo.com" {...field} />
+                <Input placeholder="john122@yahoo.com" {...field} className="bg-input" />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -109,7 +121,7 @@ export default function Signup() {
             <FormItem>
               <FormLabel>Username</FormLabel>
               <FormControl>
-                <Input placeholder="john213" {...field} />
+                <Input placeholder="john213" {...field} className="bg-input" />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -123,7 +135,7 @@ export default function Signup() {
             <FormItem>
               <FormLabel>Full Name</FormLabel>
               <FormControl>
-                <Input placeholder="john greg" {...field} />
+                <Input placeholder="john greg" {...field} className="bg-input" />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -137,7 +149,7 @@ export default function Signup() {
             <FormItem>
               <FormLabel>Phone</FormLabel>
               <FormControl>
-                <Input placeholder="3402349933" {...field} />
+                <Input placeholder="3402349933" {...field} className="bg-input" />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -155,7 +167,8 @@ export default function Signup() {
                   <Input
                     type={passwordVisible ? 'text' : 'password'}
                     placeholder="password"
-                    {...field}
+                    {...field} 
+                    className="bg-input"
                   />
                 </FormControl>
                 <button

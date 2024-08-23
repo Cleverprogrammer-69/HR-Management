@@ -35,7 +35,7 @@ export default function ClientLayout({
             onClick={handleToggleSideBar}
           ></div>
         )}
-        <div className="p-5 w-full md:ml-[270px]">
+        <div className={`md:p-5 md:pt-10 w-full m-0 transition-transform ${sideBarOpen ? 'md:ml-[250px]' : 'md:ml-[20px]'} mt-10`}>
           {children}
           <Toaster />
         </div>
