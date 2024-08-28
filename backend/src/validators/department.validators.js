@@ -10,7 +10,7 @@ const departmentDataValidator = async (departmentCredentials) => {
     if (Object.values(departmentCredentials).some(field => {
         return field?.trim() === "" || !field
     })){
-        throw new ApiError(400, "All fields must be filled")
+        throw new ApiError(400, "All fields must be filled.")
     }
 
     const existingDepartment = await Department.findOne({
@@ -27,14 +27,14 @@ const departmentIdValidator = async (departmentId) => {
     // check if id is validate mongoose id
 
     if (!validator.isNumeric(departmentId)){
-        throw new ApiError(400, "Invalid department Id")
+        throw new ApiError(400, "Invalid department Id.")
     }
 
     // check if we have department with that id
 
     const departmentFound = await Department.findById(departmentId)
     if(!departmentFound){
-        throw new ApiError(404, "Department not found by Id")
+        throw new ApiError(404, "Department not found by Id.")
     }
     return departmentFound
 }
@@ -43,7 +43,7 @@ const departmentUpdateValidator = async (data) => {
     if (Object.values(data).some(field => {
         return field?.trim() === "" || !field
     })){
-        throw new ApiError(400, "Changed fields can't be empty")
+        throw new ApiError(400, "Changed fields can't be empty.")
     }
 }
 

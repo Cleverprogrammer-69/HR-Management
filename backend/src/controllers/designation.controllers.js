@@ -20,7 +20,7 @@ const createDesignation = asyncHandler(async (req, res) => {
   });
   const createdDesignation = await Designation.findById(newDesignation._id);
   if (!createdDesignation) {
-    throw new ApiError(500, "Something went wrong while creating Designation");
+    throw new ApiError(500, "Something went wrong while creating Designation.");
   }
   res
     .status(201)
@@ -28,7 +28,7 @@ const createDesignation = asyncHandler(async (req, res) => {
       new ApiResponse(
         201,
         createdDesignation,
-        "Successfully created new Designation"
+        "Successfully created new Designation."
       )
     );
 });
@@ -41,7 +41,7 @@ const getAllDesignations = asyncHandler(async (req, res) => {
   if (!designations) {
     throw new ApiError(
       500,
-      "Something went wrong while fetching all Designations"
+      "Something went wrong while fetching all Designations."
     );
   }
 
@@ -49,7 +49,7 @@ const getAllDesignations = asyncHandler(async (req, res) => {
   res
     .status(200)
     .json(
-      new ApiResponse(200, designations, "Successfully fetch all Designations")
+      new ApiResponse(200, designations, "Successfully fetch all Designations.")
     );
 });
 
@@ -64,13 +64,13 @@ const getOneDesignation = asyncHandler(async (req, res) => {
   // if not fetched throw error
   // if not found throw error
   if (!designationFound) {
-    throw new ApiError(500, "Something went wrong while fetching Designation");
+    throw new ApiError(500, "Something went wrong while fetching Designation.");
   }
 
   // res
   res
     .status(200)
-    .json(new ApiResponse(200, designationFound, "Designation found successfully"));
+    .json(new ApiResponse(200, [designationFound], "Designation found successfully."));
 });
 
 const updateDesignation = asyncHandler(async (req, res) => {
@@ -86,7 +86,7 @@ const updateDesignation = asyncHandler(async (req, res) => {
   await designationUpdateValidator(data);
   // if Nature id is valid then
   if (!designationFound) {
-    throw new ApiError(500, "Something went wrong while fetching Designation");
+    throw new ApiError(500, "Something went wrong while fetching Designation.");
   }
   // update the Nature
   const updatedDesignation = await Designation.findByIdAndUpdate(
@@ -102,7 +102,7 @@ const updateDesignation = asyncHandler(async (req, res) => {
   res
     .status(200)
     .json(
-      new ApiResponse(200, updatedDesignation, "Designation updated successfully")
+      new ApiResponse(200, updatedDesignation, "Designation updated successfully.")
     );
 });
 
@@ -112,7 +112,7 @@ const deleteDesignation = asyncHandler(async (req, res) => {
   // validate the id
   const designationFound = await designationIdValidator(designationId);
   if (!designationFound) {
-    throw new ApiError(500, "Something went wrong while fetching Designation");
+    throw new ApiError(500, "Something went wrong while fetching Designation.");
   }
   // delete the doc from db
   const deletedDesignation = await Designation.findByIdAndDelete(designationId);
@@ -122,7 +122,7 @@ const deleteDesignation = asyncHandler(async (req, res) => {
       new ApiResponse(
         200,
         deletedDesignation,
-        "Successfully deleted the Designation"
+        "Successfully deleted the Designation."
       )
     );
 });

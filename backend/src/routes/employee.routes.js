@@ -21,7 +21,7 @@ router
 router
   .route("/:employeeId")
   .get(getOneEmployee)
-  .patch(updateEmployee)
+  .patch(upload.single("image"), updateEmployee)
   .delete(deleteEmployee);
 
 export default router;

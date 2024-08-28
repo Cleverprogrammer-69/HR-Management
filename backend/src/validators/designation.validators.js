@@ -10,7 +10,7 @@ const designationDataValidator = async (designationCredentials) => {
       return field?.trim() === "" || !field;
     })
   ) {
-    throw new ApiError(400, "All fields must be filled");
+    throw new ApiError(400, "All fields must be filled.");
   }
 
   const existingdesignation = await Designation.findOne({
@@ -30,14 +30,14 @@ const designationIdValidator = async (designationId) => {
   // check if id is validate mongoose id
 
   if (!validator.isNumeric(designationId)) {
-    throw new ApiError(400, "Invalid designation Id");
+    throw new ApiError(400, "Invalid designation Id.");
   }
 
   // check if we have designation with that id
 
   const designationFound = await Designation.findById(designationId);
   if (!designationFound) {
-    throw new ApiError(404, "designation not found by Id");
+    throw new ApiError(404, "designation not found by Id.");
   }
   return designationFound;
 };
@@ -48,7 +48,7 @@ const designationUpdateValidator = async (data) => {
       return field?.trim() === "" || !field;
     })
   ) {
-    throw new ApiError(400, "Changed fields can't be empty");
+    throw new ApiError(400, "Changed fields can't be empty.");
   }
 };
 

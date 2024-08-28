@@ -16,12 +16,12 @@ const createJobType = asyncHandler( async (req, res) => {
     })
     const newJobType = await JobType.findById(jobType._id)
     if(!newJobType){
-        throw new ApiError(500, "Something went wrong while creating jobType")
+        throw new ApiError(500, "Something went wrong while creating jobType.")
     }
     res
     .status(201)
     .json(
-        new ApiResponse(201, newJobType, "Successfully created new JobType")
+        new ApiResponse(201, newJobType, "Successfully created new JobType.")
     )
 })
 
@@ -33,7 +33,7 @@ const getAllJobTypes = asyncHandler(async (req, res) => {
   if (!jobTypes) {
     throw new ApiError(
       500,
-      "Something went wrong while fetching all jobTypes"
+      "Something went wrong while fetching all jobTypes."
     );
   }
 
@@ -41,7 +41,7 @@ const getAllJobTypes = asyncHandler(async (req, res) => {
   res
     .status(200)
     .json(
-      new ApiResponse(200, jobTypes, "Successfully fetch all jobTypes")
+      new ApiResponse(200, jobTypes, "Successfully fetch all jobTypes.")
     );
 });
 
@@ -56,13 +56,13 @@ const getOneJobType = asyncHandler(async (req, res) => {
   // if not fetched throw error
   // if not found throw error
   if (!jobTypeFound) {
-    throw new ApiError(500, "Something went wrong while fetching jobType");
+    throw new ApiError(500, "Something went wrong while fetching jobType.");
   }
 
   // res
   res
     .status(200)
-    .json(new ApiResponse(200, jobTypeFound, "JobType found successfully"));
+    .json(new ApiResponse(200, [jobTypeFound], "JobType found successfully."));
 });
 
 const updateJobType = asyncHandler(async (req, res) => {
@@ -78,7 +78,7 @@ const updateJobType = asyncHandler(async (req, res) => {
   await jobTypeUpdateValidator(data);
   // if Type id is valid then
   if (!jobTypeFound) {
-    throw new ApiError(500, "Something went wrong while fetching jobType");
+    throw new ApiError(500, "Something went wrong while fetching jobType.");
   }
   // update the Type
   const updatedJobType = await JobType.findByIdAndUpdate(
@@ -97,7 +97,7 @@ const updateJobType = asyncHandler(async (req, res) => {
       new ApiResponse(
         200,
         updatedJobType,
-        "JobType updated successfully"
+        "JobType updated successfully."
       )
     );
 });
@@ -108,7 +108,7 @@ const deleteJobType = asyncHandler(async (req, res) => {
   // validate the id
   const jobTypeFound = await jobTypeIdValidator(jobTypeId);
   if (!jobTypeFound) {
-    throw new ApiError(500, "Something went wrong while fetching jobType");
+    throw new ApiError(500, "Something went wrong while fetching jobType.");
   }
   // delete the doc from db
   const deletedJobType = await JobType.findByIdAndDelete(jobTypeId);
@@ -118,7 +118,7 @@ const deleteJobType = asyncHandler(async (req, res) => {
       new ApiResponse(
         200,
         deletedJobType,
-        "Successfully deleted the JobType"
+        "Successfully deleted the JobType."
       )
     );
 });

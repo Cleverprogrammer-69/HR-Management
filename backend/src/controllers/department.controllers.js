@@ -28,14 +28,14 @@ const createDepartment = asyncHandler( async (req, res) => {
     const createdDepartment = await Department.findById(newDepartment._id)
 
     if(!createdDepartment){
-        throw new ApiError(500, "Something went wrong while creating department")
+        throw new ApiError(500, "Something went wrong while creating department.")
     }
     //res
 
     res
     .status(201)
     .json(
-        new ApiResponse(201, newDepartment, "Successfully created new department")
+        new ApiResponse(201, newDepartment, "Successfully created new department.")
     )
 })
 
@@ -45,13 +45,13 @@ const getAllDepartments = asyncHandler(async(req,res)=>{
 
     // check if i have res
     if(!departments){
-        throw new ApiError(500, "Something went wrong while fetching all departments")
+        throw new ApiError(500, "Something went wrong while fetching all departments.")
     }
 
     // res
     res.status(200)
     .json(
-        new ApiResponse(200, departments, "Successfully fetch all departments")
+        new ApiResponse(200, departments, "Successfully fetch all departments.")
     )
 })
 
@@ -66,14 +66,14 @@ const getOneDepartment = asyncHandler( async (req, res) => {
     // if not fetched throw error
     // if not found throw error
     if (!departmentFound){
-        throw new ApiError(500, "Something went wrong while fetching department")
+        throw new ApiError(500, "Something went wrong while fetching department.")
     }
     
     // res
     res
     .status(200)
     .json(
-        new ApiResponse(200, departmentFound, "Department found successfully")
+        new ApiResponse(200, [departmentFound], "Department found successfully.")
     )
 })
 
@@ -90,7 +90,7 @@ const updateDepartment = asyncHandler( async (req,res) => {
     await departmentUpdateValidator(data)
     // if department id is valid then 
     if (!departmentFound) {
-      throw new ApiError(500, "Something went wrong while fetching department");
+      throw new ApiError(500, "Something went wrong while fetching department.");
     }
     // update the department
     const updatedDepartment = await Department.findByIdAndUpdate(departmentFound._id,
@@ -108,7 +108,7 @@ const updateDepartment = asyncHandler( async (req,res) => {
         new ApiResponse(
           200,
           updatedDepartment,
-          "Department updated successfully"
+          "Department updated successfully."
         )
       );
 
@@ -122,7 +122,7 @@ const deleteDepartment = asyncHandler(async (req, res) => {
     if (!departmentFound) {
        throw new ApiError(
          500,
-         "Something went wrong while fetching department"
+         "Something went wrong while fetching department."
        );
     }
     // delete the doc from db
@@ -130,7 +130,7 @@ const deleteDepartment = asyncHandler(async (req, res) => {
     res
     .status(200)
     .json(
-        new ApiResponse(200, deletedDepartment, "Successfully deleted the department")
+        new ApiResponse(200, deletedDepartment, "Successfully deleted the department.")
     )
 })
 

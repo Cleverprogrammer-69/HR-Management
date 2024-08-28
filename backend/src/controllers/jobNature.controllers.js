@@ -19,11 +19,11 @@ const createJobNature = asyncHandler(async (req, res) => {
   });
   const newJobNature = await JobNature.findById(jobNature._id);
   if (!newJobNature) {
-    throw new ApiError(500, "Something went wrong while creating jobNature");
+    throw new ApiError(500, "Something went wrong while creating jobNature.");
   }
   res
     .status(201)
-    .json(new ApiResponse(201, newJobNature, "Successfully created new JobNature"));
+    .json(new ApiResponse(201, newJobNature, "Successfully created new JobNature."));
 });
 
 const getAllJobNatures = asyncHandler(async (req, res) => {
@@ -32,13 +32,13 @@ const getAllJobNatures = asyncHandler(async (req, res) => {
 
   // check if i have res
   if (!jobNatures) {
-    throw new ApiError(500, "Something went wrong while fetching all jobNatures");
+    throw new ApiError(500, "Something went wrong while fetching all jobNatures.");
   }
 
   // res
   res
     .status(200)
-    .json(new ApiResponse(200, jobNatures, "Successfully fetch all jobNatures"));
+    .json(new ApiResponse(200, jobNatures, "Successfully fetch all jobNatures."));
 });
 
 const getOneJobNature = asyncHandler(async (req, res) => {
@@ -52,13 +52,13 @@ const getOneJobNature = asyncHandler(async (req, res) => {
   // if not fetched throw error
   // if not found throw error
   if (!jobNatureFound) {
-    throw new ApiError(500, "Something went wrong while fetching jobNature");
+    throw new ApiError(500, "Something went wrong while fetching jobNature.");
   }
 
   // res
   res
     .status(200)
-    .json(new ApiResponse(200, jobNatureFound, "JobNature found successfully"));
+    .json(new ApiResponse(200, [jobNatureFound], "JobNature found successfully."));
 });
 
 const updateJobNature = asyncHandler(async (req, res) => {
@@ -74,7 +74,7 @@ const updateJobNature = asyncHandler(async (req, res) => {
   await jobNatureUpdateValidator(data);
   // if Nature id is valid then
   if (!jobNatureFound) {
-    throw new ApiError(500, "Something went wrong while fetching jobNature");
+    throw new ApiError(500, "Something went wrong while fetching jobNature.");
   }
   // update the Nature
   const updatedJobNature = await JobNature.findByIdAndUpdate(
@@ -89,7 +89,7 @@ const updateJobNature = asyncHandler(async (req, res) => {
   // res
   res
     .status(200)
-    .json(new ApiResponse(200, updatedJobNature, "JobNature updated successfully"));
+    .json(new ApiResponse(200, updatedJobNature, "JobNature updated successfully."));
 });
 
 const deleteJobNature = asyncHandler(async (req, res) => {
@@ -98,14 +98,14 @@ const deleteJobNature = asyncHandler(async (req, res) => {
   // validate the id
   const jobNatureFound = await jobNatureIdValidator(jobNatureId);
   if (!jobNatureFound) {
-    throw new ApiError(500, "Something went wrong while fetching jobNature");
+    throw new ApiError(500, "Something went wrong while fetching jobNature.");
   }
   // delete the doc from db
   const deletedJobNature = await JobNature.findByIdAndDelete(jobNatureId);
   res
     .status(200)
     .json(
-      new ApiResponse(200, deletedJobNature, "Successfully deleted the JobNature")
+      new ApiResponse(200, deletedJobNature, "Successfully deleted the JobNature.")
     );
 });
 
