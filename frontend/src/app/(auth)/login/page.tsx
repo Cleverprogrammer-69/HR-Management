@@ -72,7 +72,7 @@ export default function Login() {
         <h2 className="mt-0 font-extrabold text-xl">Login to your account</h2>
         <div className="mt-2 p-0">
           <span className="font-semibold text-sm text-foreground">
-            Don't have an account?{' '}
+            Don&#39;t have an account?{' '}
           </span>
           <Link href={'/signup'} className="text-primary ml-1 font-bold underline">
             Sign Up

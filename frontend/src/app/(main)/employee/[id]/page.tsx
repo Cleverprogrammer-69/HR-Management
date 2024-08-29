@@ -21,6 +21,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { toast } from '@/components/ui/use-toast';
+import { Checkbox } from '@/components/ui/checkbox';
 
 import { Input } from '@/components/ui/input';
 import { useEffect, useState } from 'react';
@@ -32,7 +33,7 @@ import { getAllJobTypes } from '@/lib/store/features/jobType/jobTypeSlice';
 import type { ChangeEvent } from 'react';
 import {
   getOneEmployee,
-  newEmployee,
+  updateEmployee,
 } from '@/lib/store/features/employee/employeeSlice';
 import { useParams } from 'next/navigation';
 import { Employee } from '@/types/employeeTypes';
@@ -100,13 +101,14 @@ const formSchema = z.object({
   jobNatureId: z.string().min(1, {
     message: 'JobNature is required.',
   }),
-  image: imageSchema.optional(),
+  // image: imageSchema.optional(),
 });
 
 export default function Page() {
   const dispatch = useAppDispatch();
   const params = useParams();
-  const [image, setImage] = useState('')
+  const [image, setImage] = useState('');
+  const [areFieldsDisabled, setAreFieldsDisabled] = useState(true);
   const { employeeStatus, employeeError, employee } = useAppSelector(
     (state) => state.employee
   );
@@ -123,7 +125,7 @@ export default function Page() {
     (state) => state.jobNature
   );
 
-  const { _id, email } = employee?.data?.[0] || {};
+  // const { _id, email } = employee?.data?.[0] || {};
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -139,7 +141,7 @@ export default function Page() {
       designationId: '',
       jobTypeId: '',
       jobNatureId: '',
-      image: undefined,
+      // image: undefined,
     },
   });
 
@@ -148,7 +150,6 @@ export default function Page() {
       console.log('onSubmit triggered');
       const formData = new FormData();
 
-      // Append other form data
       formData.append('emp_name', values.emp_name);
       formData.append('email', values.email || '');
       formData.append('father', values.father);
@@ -161,20 +162,25 @@ export default function Page() {
       formData.append('emp_type', values.jobTypeId);
       formData.append('emp_nature', values.jobNatureId);
 
-      // Append the file if it exists
-      if (values.image && values.image instanceof File) {
-        formData.append('image', values.image);
-      }
-
-      const createdEmployee = await dispatch(newEmployee(formData)).unwrap();
+      // if (values.image && values.image instanceof File) {
+      //   formData.append('image', values.image);
+      // }
+      // console.log(formData.get("emp_name"))
+      const updatedEmployee = await dispatch(
+        updateEmployee({
+          employeeId: params.id,
+          employeeData: formData,
+        })
+      ).unwrap();
+      console.log(updatedEmployee);
       toast({
-        title: 'Employee Created',
-        description: 'New employee is registered successfuly.',
+        title: 'Employee Updated',
+        description: 'Employee is updated successfuly.',
       });
     } catch (err) {
       toast({
         variant: 'destructive',
-        title: 'Employee Creation Failed',
+        title: 'Employee update Failed',
         description: err as string,
       });
       console.error(err);
@@ -205,9 +211,9 @@ export default function Page() {
             designationId: emp.emp_designation._id || '',
             jobTypeId: emp.emp_type._id || '',
             jobNatureId: emp.emp_nature._id || '',
-            image: emp.image || '',
+            // image: emp.image || '',
           });
-          setImage(emp.image)
+          emp.image && setImage(emp.image);
         }
         // console.log(employee?.data[0])
       } catch (error) {
@@ -225,9 +231,35 @@ export default function Page() {
       <form
         onSubmit={form.handleSubmit(onSubmit, (errors) => console.log(errors))}
       >
-        <div className="grid gap-3 grid-cols-1 md:grid-cols-3">
-          {/* <Image src={image} alt="employee-image" width={2} height={2}/> */}
-          <img src={image} alt="employee-image" className='w-[100px] h-[100px]'/>
+        <div className="items-top flex space-x-2">
+          <Checkbox
+            id="terms1"
+            checked={!areFieldsDisabled}
+            onCheckedChange={() => setAreFieldsDisabled(!areFieldsDisabled)}
+          />
+          <div className="grid gap-1.5 leading-none">
+            <label
+              htmlFor="terms1"
+              className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+            >
+              Want to edit?
+            </label>
+          </div>
+        </div>
+        <div className="grid gap-3 grid-cols-1 md:grid-cols-3 mt-5">
+          <div className="container border-2 border-border rounded-lg text-center ">
+            {image?.length !== 0 ? (
+              <Image
+                src={image}
+                alt="employee-image"
+                width={100}
+                height={100}
+              />
+            ) : (
+              <span className='text-sm pt-3'>No image</span>
+            )}
+          </div>
+
           <FormField
             control={form.control}
             name="emp_name"
@@ -235,7 +267,11 @@ export default function Page() {
               <FormItem>
                 <FormLabel>Name</FormLabel>
                 <FormControl>
-                  <Input placeholder="name" {...field} />
+                  <Input
+                    placeholder="name"
+                    {...field}
+                    disabled={areFieldsDisabled}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -248,7 +284,11 @@ export default function Page() {
               <FormItem>
                 <FormLabel>Father name</FormLabel>
                 <FormControl>
-                  <Input placeholder="father" {...field} disabled />
+                  <Input
+                    placeholder="father"
+                    {...field}
+                    disabled={areFieldsDisabled}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -262,7 +302,11 @@ export default function Page() {
               <FormItem>
                 <FormLabel>Phone</FormLabel>
                 <FormControl>
-                  <Input placeholder="phone" {...field} />
+                  <Input
+                    placeholder="phone"
+                    {...field}
+                    disabled={areFieldsDisabled}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -276,7 +320,11 @@ export default function Page() {
               <FormItem>
                 <FormLabel>Email</FormLabel>
                 <FormControl>
-                  <Input placeholder="email" {...field} />
+                  <Input
+                    placeholder="email"
+                    {...field}
+                    disabled={areFieldsDisabled}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -290,7 +338,11 @@ export default function Page() {
               <FormItem>
                 <FormLabel>NIC</FormLabel>
                 <FormControl>
-                  <Input placeholder="nic" {...field} />
+                  <Input
+                    placeholder="nic"
+                    {...field}
+                    disabled={areFieldsDisabled}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -304,7 +356,11 @@ export default function Page() {
               <FormItem>
                 <FormLabel>Prof. Qualification</FormLabel>
                 <FormControl>
-                  <Input placeholder="qualification" {...field} />
+                  <Input
+                    placeholder="qualification"
+                    {...field}
+                    disabled={areFieldsDisabled}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -318,7 +374,11 @@ export default function Page() {
               <FormItem>
                 <FormLabel>Tech. skill</FormLabel>
                 <FormControl>
-                  <Input placeholder="skill" {...field} />
+                  <Input
+                    placeholder="skill"
+                    {...field}
+                    disabled={areFieldsDisabled}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -335,6 +395,7 @@ export default function Page() {
                     form.setValue('departmentId', value)
                   }
                   value={form.watch('departmentId') || ''}
+                  disabled={areFieldsDisabled}
                 >
                   <FormControl>
                     <SelectTrigger>
@@ -369,6 +430,7 @@ export default function Page() {
                     form.setValue('designationId', value)
                   }
                   value={form.watch('designationId') || ''}
+                  disabled={areFieldsDisabled}
                 >
                   <FormControl>
                     <SelectTrigger>
@@ -401,6 +463,7 @@ export default function Page() {
                 <Select
                   onValueChange={(value) => form.setValue('jobNatureId', value)}
                   value={form.watch('jobNatureId') || ''}
+                  disabled={areFieldsDisabled}
                 >
                   <FormControl>
                     <SelectTrigger>
@@ -433,6 +496,7 @@ export default function Page() {
                 <Select
                   onValueChange={(value) => form.setValue('jobTypeId', value)}
                   value={form.watch('jobTypeId') || ''}
+                  disabled={areFieldsDisabled}
                 >
                   <FormControl>
                     <SelectTrigger>
@@ -457,7 +521,7 @@ export default function Page() {
             )}
           />
         </div>
-        <div className="min-w-full">
+        {/* <div className="min-w-full">
           <FormField
             control={form.control}
             name="image"
@@ -483,16 +547,16 @@ export default function Page() {
               </FormItem>
             )}
           />
-        </div>
+        </div> */}
         <Button
           type="submit"
           className="w-full mt-2"
-          disabled={employeeStatus === 'loading'}
+          disabled={employeeStatus === 'loading' || areFieldsDisabled}
         >
           {employeeStatus === 'loading' ? (
-            <span>Creating...</span>
+            <span>Updating...</span>
           ) : (
-            <span>Create</span>
+            <span>Update</span>
           )}
         </Button>
       </form>

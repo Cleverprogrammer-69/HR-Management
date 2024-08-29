@@ -43,6 +43,7 @@ export default function Page() {
 
   return (
     <div className="md:container md:mx-auto m-0 p-0 md:py-2 w-screen md:w-full">
+      
       {employeeStatus === 'succeeded' && (
         <DataTable columns={columns} data={data} />
       )}

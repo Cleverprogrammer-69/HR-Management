@@ -15,8 +15,9 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { redirect, useRouter } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { Redirect } from 'next';
+import { toast } from '../ui/use-toast';
 
 export default function Navbar() {
   const dispatch = useAppDispatch()
@@ -26,9 +27,18 @@ export default function Navbar() {
   const handleToggleSideBar = () => {
     dispatch(toggleSideBar());
   };
-  const handleLogout = () => {
-    router.push('/login')
-    dispatch(logoutUser());
+  const handleLogout = async () => {
+    
+    try {
+      const loggodOutUser = await dispatch(logoutUser());
+      router.push('/login')
+    } catch (error) {
+      toast({
+        title: "Logout failed",
+        description: error as string,
+        variant: 'destructive'
+      })
+    }
     
   }
   return (

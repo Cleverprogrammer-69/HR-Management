@@ -10,7 +10,7 @@ const initialState = {
 const URL = process.env.HR_API_V1
 export const signupUser = createAsyncThunk(
   'auth/signupUser',
-  async (userData, thunkAPI) => {
+  async (userData:any, thunkAPI) => {
     try {
       const response = await axios.post(`${URL}/user/register`, userData, {
         withCredentials: true,
@@ -26,7 +26,7 @@ export const signupUser = createAsyncThunk(
 
 export const loginUser = createAsyncThunk(
   'auth/loginUser',
-  async (userData, thunkAPI) => {
+  async (userData:any, thunkAPI) => {
     try {
       const response = await axios.post(
         `${URL}/user/login`,

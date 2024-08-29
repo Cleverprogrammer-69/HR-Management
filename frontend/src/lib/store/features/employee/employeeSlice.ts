@@ -81,6 +81,27 @@ export const deleteOneEmployee = createAsyncThunk(
     }
   }
 )
+
+export const updateEmployee = createAsyncThunk(
+  'employee/update',
+  async(data:any, thunkAPI) => {
+    const {employeeId, employeeData} = data
+    try {
+      console.log(employeeData.get("emp_name"))
+      const response = await axios.patch(
+        `${process.env.HR_API_V1}/employee/${employeeId}`,
+        employeeData,
+        {withCredentials: true}
+      )
+      return response.data
+    } catch (error: any) {
+      const errorMsg = extractErrorMessage(error.response.data)
+      return thunkAPI.rejectWithValue(
+        errorMsg || "Something went wrong while update employee."
+      )
+    }
+  }
+)
 const employeeSlice = createSlice({
   name: 'employee',
   initialState,
@@ -139,6 +160,20 @@ const employeeSlice = createSlice({
       state.employeeStatus = 'succeeded';
     });
     builder.addCase(deleteOneEmployee.rejected, (state, action: any) => {
+      state.employeeError = action.payload;
+      state.employeeStatus = 'failed';
+    });
+    //update an employee
+    builder.addCase(updateEmployee.pending, (state) => {
+      state.employeeStatus = 'loading';
+      state.employeeError = null;
+    });
+    builder.addCase(updateEmployee.fulfilled, (state, action) => {
+      state.employeeError = null;
+      state.employee = action.payload;
+      state.employeeStatus = 'succeeded';
+    });
+    builder.addCase(updateEmployee.rejected, (state, action: any) => {
       state.employeeError = action.payload;
       state.employeeStatus = 'failed';
     });

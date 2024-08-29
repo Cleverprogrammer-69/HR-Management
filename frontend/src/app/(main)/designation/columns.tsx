@@ -22,49 +22,52 @@ import { ToastAction } from '@/components/ui/toast';
 import Link from 'next/link';
 import { useState } from 'react';
 import { useAppDispatch } from '@/lib/store/store';
-import { deleteOneEmployee } from '@/lib/store/features/employee/employeeSlice';
+import { deleteOneDesignation } from '@/lib/store/features/designation/designationSlice';
 import { toast } from '@/components/ui/use-toast';
 import { useRouter } from 'next/navigation';
 
-export type Emp_data = {
+export type Designation_data = {
   id: number;
   name: string;
-  phone: number;
-  department: string;
+  abbrevation: string;
 };
 
-const EmployeeActionsCell: React.FC<{ employee: Emp_data }> = ({
-  employee,
+const DesignationActionsCell: React.FC<{ designation: Designation_data }> = ({
+  designation,
 }) => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const dispatch = useAppDispatch()
-  const router = useRouter()
+  const dispatch = useAppDispatch();
+  const router = useRouter();
 
   const handleDialogOpen = () => setIsDialogOpen(true);
   const handleDialogClose = () => setIsDialogOpen(false);
-  const handleDelete = async (employeeId: string | string[]) => {
+  const handleDelete = async (designationId: string | string[]) => {
     try {
-      const deletedEmp = await dispatch(deleteOneEmployee(employeeId));
+      const deletedDesignation = await dispatch(
+        deleteOneDesignation(designationId)
+      );
       toast({
-        title: "Deleted successfuly",
+        title: 'Deleted successfuly',
         variant: 'default',
-        duration: 2000
-      })
-      window.location.reload()
+        duration: 2000,
+      });
+      window.location.reload();
     } catch (error) {
       toast({
         title: 'Deletion Failed',
         variant: 'destructive',
         description: error as string,
         action: (
-          <ToastAction altText={'Refresh'} onClick={() => handleDelete(employeeId)}>
+          <ToastAction
+            altText={'Refresh'}
+            onClick={() => handleDelete(designationId)}
+          >
             Try again
           </ToastAction>
         ),
       });
     }
-
-  }
+  };
 
   return (
     <div className="text-center">
@@ -78,13 +81,13 @@ const EmployeeActionsCell: React.FC<{ employee: Emp_data }> = ({
         <DropdownMenuContent align="end">
           <DropdownMenuLabel>Actions</DropdownMenuLabel>
           <DropdownMenuItem
-            onClick={() => navigator.clipboard.writeText(String(employee.id))}
+            onClick={() => navigator.clipboard.writeText(String(designation.id))}
           >
-            Copy employee Id
+            Copy designation Id
           </DropdownMenuItem>
           <DropdownMenuSeparator />
           <DropdownMenuItem>
-            <Link href={`/employee/${employee.id}`}>View Details</Link>
+            <Link href={`/designation/${designation.id}`}>View Details</Link>
           </DropdownMenuItem>
           <DropdownMenuSeparator />
           <DropdownMenuItem onClick={handleDialogOpen}>Delete</DropdownMenuItem>
@@ -99,7 +102,7 @@ const EmployeeActionsCell: React.FC<{ employee: Emp_data }> = ({
               This action cannot be undone. This will permanently delete your
               account and remove your data from our servers.
             </DialogDescription>
-      
+
             <div className="flex justify-end space-x-2 mt-4">
               <Button variant="outline" onClick={handleDialogClose}>
                 Cancel
@@ -107,8 +110,8 @@ const EmployeeActionsCell: React.FC<{ employee: Emp_data }> = ({
               <Button
                 variant="destructive"
                 onClick={() => {
-                  handleDelete(String(employee.id))
-                  handleDialogClose(); 
+                  handleDelete(String(designation.id));
+                  handleDialogClose();
                 }}
               >
                 Confirm
@@ -121,7 +124,7 @@ const EmployeeActionsCell: React.FC<{ employee: Emp_data }> = ({
   );
 };
 
-export const columns: ColumnDef<Emp_data>[] = [
+export const columns: ColumnDef<Designation_data>[] = [
   {
     accessorKey: 'id',
     header: ({ column }) => (
@@ -134,6 +137,10 @@ export const columns: ColumnDef<Emp_data>[] = [
         <ArrowUpDown className="ml-2 h-4 w-4" />
       </Button>
     ),
+  },
+  {
+    accessorKey: 'abbrevation',
+    header: 'Abbrevation',
   },
   {
     accessorKey: 'name',
@@ -149,16 +156,8 @@ export const columns: ColumnDef<Emp_data>[] = [
     ),
   },
   {
-    accessorKey: 'department',
-    header: 'Department',
-  },
-  {
-    accessorKey: 'phone',
-    header: 'Phone',
-  },
-  {
     id: 'actions',
     header: () => <div className="text-center">Actions</div>,
-    cell: ({ row }) => <EmployeeActionsCell employee={row.original} />,
+    cell: ({ row }) => <DesignationActionsCell designation={row.original} />,
   },
 ];

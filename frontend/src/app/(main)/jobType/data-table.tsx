@@ -1,5 +1,5 @@
 'use client';
-import * as React from 'react'
+import * as React from 'react';
 import {
   ColumnDef,
   flexRender,
@@ -21,11 +21,10 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import {Input} from '@/components/ui/input';
-
+import { Input } from '@/components/ui/input';
 
 import { useAppDispatch, useAppSelector } from '@/lib/store/store';
-import { getAllEmployees } from '@/lib/store/features/employee/employeeSlice';
+import { getAllJobTypes } from '@/lib/store/features/jobType/jobTypeSlice';
 import { useEffect } from 'react';
 import Link from 'next/link';
 import { Separator } from '@/components/ui/separator';
@@ -40,12 +39,11 @@ export function DataTable<TData, TValue>({
   data,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
-  const {employee} = useAppSelector(state => state.employee)
+  const { jobType } = useAppSelector((state) => state.jobType);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
   );
 
-  
   const table = useReactTable({
     data,
     columns,
@@ -64,10 +62,10 @@ export function DataTable<TData, TValue>({
   return (
     <div className="bg-card p-5 rounded-lg">
       <div className="flex justify-between items-center">
-        <h1 className="text-2xl font-extrabold">Employees</h1>
-        <span className='text-md font-bold'>Total: {employee?.data.length}</span>
+        <h1 className="text-2xl font-extrabold">JobTypes</h1>
+        <span className="text-md font-bold">Total: {jobType?.data.length}</span>
       </div>
-      
+
       <div className="flex items-center justify-between space-x-2 py-4">
         <Input
           placeholder="Filter names..."
@@ -78,7 +76,7 @@ export function DataTable<TData, TValue>({
           className="max-w-sm bg-input"
         />
         <Button variant={'default'}>
-          <Link href={'/employee/new'}>+ New</Link>
+          <Link href={'/jobType/new'}>+ New</Link>
         </Button>
       </div>
       <div className="rounded-md border">
