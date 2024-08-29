@@ -5,7 +5,13 @@ import jwt from 'jsonwebtoken';
 export async function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
   const accessToken = req.cookies.get('accessToken')?.value;
+
+  console.log('Middleware triggered');
+  console.log('Pathname:', pathname);
+  console.log('AccessToken:', accessToken ? 'Present' : 'Absent');
+
   const isAccessTokenValid = accessToken ? decodeToken(accessToken) : false;
+  console.log('Is Access Token Valid:', isAccessTokenValid);
 
   if (!isAccessTokenValid) {
     // If the token is invalid and user is not on an auth page, redirect to /login
@@ -13,6 +19,7 @@ export async function middleware(req: NextRequest) {
     if (!authUrls.includes(pathname)) {
       const loginUrl = req.nextUrl.clone();
       loginUrl.pathname = '/login';
+      console.log('Redirecting to /login');
       return NextResponse.redirect(loginUrl);
     }
   } else {
@@ -20,10 +27,12 @@ export async function middleware(req: NextRequest) {
     if (pathname === '/login' || pathname === '/signup') {
       const homeUrl = req.nextUrl.clone();
       homeUrl.pathname = '/';
+      console.log('Redirecting to /');
       return NextResponse.redirect(homeUrl);
     }
   }
 
+  console.log('Proceeding with request');
   return NextResponse.next();
 }
 
