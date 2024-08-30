@@ -1,12 +1,13 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 import jwt from 'jsonwebtoken';
+import { access } from 'fs';
 
 export async function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
   const accessToken = req.cookies.get('accessToken')?.value;
   console.log("Cookies in middleware", req.cookies.getAll())
-
+  console.log(req.headers)
   console.log('Middleware triggered');
   console.log('Pathname:', pathname);
   console.log('AccessToken:', accessToken ? 'Present' : 'Absent');
@@ -22,15 +23,20 @@ export async function middleware(req: NextRequest) {
     }
   } else {
     if (pathname === '/login' || pathname === '/signup') {
-      const homeUrl = req.nextUrl.clone();
-      homeUrl.pathname = '/';
       console.log('Redirecting to /');
       return NextResponse.rewrite(new URL('/', req.url));
     }
   }
 
   console.log('Proceeding with request');
-  return NextResponse.next();
+  const res = NextResponse.next();
+  // res.cookies.set("accessToken", accessToken)
+  res.cookies.set({
+    name: 'accessToken',
+    value: accessToken ? accessToken : "",
+    path: '/'
+  })
+  return res;
 }
 
 export const config = {
