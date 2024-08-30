@@ -18,14 +18,14 @@ export async function middleware(req: NextRequest) {
     const authUrls = ['/login', '/signup'];
     if (!authUrls.includes(pathname)) {
       console.log('Redirecting to /login');
-      return NextResponse.redirect(new URL('/login', req.url));
+      return NextResponse.rewrite(new URL('/login', req.url));
     }
   } else {
     if (pathname === '/login' || pathname === '/signup') {
       const homeUrl = req.nextUrl.clone();
       homeUrl.pathname = '/';
       console.log('Redirecting to /');
-      return NextResponse.redirect(new URL('/', req.url));
+      return NextResponse.rewrite(new URL('/', req.url));
     }
   }
 
