@@ -53,8 +53,7 @@ export default function Login() {
         title: "Login Successful",
         description: "Redirecting to home page."
       })
-      redirect("/")
-      // router.push('/');
+      router.push('/');
       } catch (e) {
       console.log(e)
       toast({
