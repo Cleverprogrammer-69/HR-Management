@@ -18,7 +18,7 @@ import { Input } from "@/components/ui/input";
 import { toast } from "@/components/ui/use-toast";
 import { EyeIcon, EyeOffIcon } from "lucide-react";
 import { loginUser } from "@/lib/store/features/user/authSlice";
-import { useRouter } from 'next/navigation';
+import { redirect, useRouter } from 'next/navigation';
 import { useAppDispatch, useAppSelector } from '@/lib/hooks/hooks';
 import Link from 'next/link';
 const FormSchema = z.object({
@@ -53,7 +53,8 @@ export default function Login() {
         title: "Login Successful",
         description: "Redirecting to home page."
       })
-      router.push('/')
+      redirect("/")
+      // router.push('/');
       } catch (e) {
       console.log(e)
       toast({
