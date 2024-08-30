@@ -14,21 +14,19 @@ export async function middleware(req: NextRequest) {
   console.log('Is Access Token Valid:', isAccessTokenValid);
 
   if (!isAccessTokenValid) {
-    // If the token is invalid and user is not on an auth page, redirect to /login
     const authUrls = ['/login', '/signup'];
     if (!authUrls.includes(pathname)) {
-      const loginUrl = req.nextUrl.clone();
-      loginUrl.pathname = '/login';
+      // const loginUrl = req.nextUrl.clone();
+      // loginUrl.pathname = '/login';
       console.log('Redirecting to /login');
-      return NextResponse.redirect(loginUrl);
+      return NextResponse.rewrite(new URL('/login', req.url));
     }
   } else {
-    // If token is valid and trying to access login or signup, redirect to home
     if (pathname === '/login' || pathname === '/signup') {
       const homeUrl = req.nextUrl.clone();
       homeUrl.pathname = '/';
       console.log('Redirecting to /');
-      return NextResponse.redirect(homeUrl);
+      return NextResponse.rewrite(new URL('/', req.url));
     }
   }
 
