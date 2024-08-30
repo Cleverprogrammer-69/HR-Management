@@ -5,6 +5,7 @@ import jwt from 'jsonwebtoken';
 export async function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
   const accessToken = req.cookies.get('accessToken')?.value;
+  console.log("Cookies in middleware", req.cookies.getAll())
 
   console.log('Middleware triggered');
   console.log('Pathname:', pathname);
@@ -16,8 +17,6 @@ export async function middleware(req: NextRequest) {
   if (!isAccessTokenValid) {
     const authUrls = ['/login', '/signup'];
     if (!authUrls.includes(pathname)) {
-      // const loginUrl = req.nextUrl.clone();
-      // loginUrl.pathname = '/login';
       console.log('Redirecting to /login');
       return NextResponse.redirect(new URL('/login', req.url));
     }
