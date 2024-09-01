@@ -1,38 +1,33 @@
 import { NextResponse } from 'next/server';
-import type { NextRequest } from 'next/server';
-import jwt from 'jsonwebtoken';
+import { NextRequest } from 'next/server';
 import { verifyAuth } from './lib/auth';
-import { access } from 'fs';
 
 export async function middleware(req: NextRequest) {
-  const { pathname } = req.nextUrl;
+  const path = req.nextUrl.pathname;
+  const isPublicPath = path === '/login' || path === '/signup'
   const accessToken = req.cookies.get('accessToken')?.value;
   console.log("Cookies in middleware", req.cookies.getAll())
   console.log(req.headers)
   console.log('Middleware triggered');
-  console.log('Pathname:', pathname);
+  console.log('Pathname:', path);
   console.log('AccessToken:', accessToken ? 'Present' : 'Absent');
 
   const isAccessTokenValid = accessToken && await verifyAuth(accessToken).catch(err=>{
     console.log(err)
   });
   console.log('Is Access Token Valid:', isAccessTokenValid);
-
-  if (!isAccessTokenValid) {
-    const authUrls = ['/login', '/signup'];
-    if (!authUrls.includes(pathname)) {
-      console.log('Redirecting to /login');
-      return NextResponse.redirect(new URL('/login', req.url));
-    }
-  } else {
-    if (pathname === '/login' || pathname === '/signup') {
-      console.log('Redirecting to /');
-      return NextResponse.redirect(new URL('/', req.url));
-    }
+  if(isPublicPath && isAccessTokenValid){
+    return NextResponse.redirect(new URL('/', req.url))
   }
 
+  if(!isPublicPath && !isAccessTokenValid){
+    return NextResponse.redirect(new URL('/login', req.url));
+  }
+
+ 
+
   console.log('Proceeding with request');
-  return NextResponse.next();
+  // return NextResponse.next();
 }
 
 export const config = {

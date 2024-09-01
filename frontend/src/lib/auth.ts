@@ -14,12 +14,13 @@ export async function verifyAuth(token: string) {
   // const token = req.cookies.get(USER_TOKEN)?.value;
 
   if (!token) throw new AuthError('Missing user token');
-
+  console.log("verifyAuth triggered")
   try {
     const verified = await jwtVerify(
       token,
       new TextEncoder().encode(getJwtSecretKey())
     );
+    console.log('Verified ? :', verified.payload as UserJwtPayload);
     return verified.payload as UserJwtPayload;
   } catch (err) {
     throw new AuthError('Your token has expired.');
