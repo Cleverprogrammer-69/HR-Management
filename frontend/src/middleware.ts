@@ -4,6 +4,8 @@ import { verifyAuth } from './lib/auth';
 export async function middleware(req: NextRequest) {
   const path = req.nextUrl.pathname;
   const isPublicPath = path === '/login' || path === '/signup'
+  const response = NextResponse.next();
+  let token = '';
   console.log("Cookies in middleware", req.cookies.getAll())
   console.log(req.headers)
   console.log('Middleware triggered');
@@ -14,20 +16,28 @@ export async function middleware(req: NextRequest) {
   });
   console.log('Is Access Token Valid:', isAccessTokenValid);
   if (!isAccessTokenValid) {
+    console.log('invalid token.')
     // if this an API request, respond with JSON
     if (!isPublicPath) {
+      console.log('invalid token and private path access requested.')
       return NextResponse.redirect(new URL('/login', req.url))
     }
-    // otherwise, redirect to the set token page
-    // else {
-    //   return NextResponse.redirect(new URL('/', req.url));
-    // }
+  } else {
+    console.log('valid token')
+    token = req.cookies.get('accessToken')?.value || ""
+    console.log("token : ", token)
+    response.cookies.set('accessToken', token);
+    if (isPublicPath) {
+      console.log('valid token and public path access requested.')
+      
+      return NextResponse.redirect(new URL('/', req.url));
+    }
   }
 
  
 
   console.log('Proceeding with request');
-  // return NextResponse.next();
+  return response;
 }
 
 export const config = {
