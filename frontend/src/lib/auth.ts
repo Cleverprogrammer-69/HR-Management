@@ -18,7 +18,8 @@ export async function verifyAuth(token: string) {
   try {
     const verified = await jwtVerify(
       token,
-      new TextEncoder().encode(getJwtSecretKey())
+      new TextEncoder().encode(getJwtSecretKey()),
+      {}
     );
     console.log('Verified ? :', verified.payload as UserJwtPayload);
     return verified.payload as UserJwtPayload;
