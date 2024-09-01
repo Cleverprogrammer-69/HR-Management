@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 import jwt from 'jsonwebtoken';
+import { verifyAuth } from './lib/auth';
 import { access } from 'fs';
 
 export async function middleware(req: NextRequest) {
@@ -12,31 +13,26 @@ export async function middleware(req: NextRequest) {
   console.log('Pathname:', pathname);
   console.log('AccessToken:', accessToken ? 'Present' : 'Absent');
 
-  const isAccessTokenValid = accessToken ? decodeToken(accessToken) : false;
+  const isAccessTokenValid = accessToken && await verifyAuth(accessToken).catch(err=>{
+    console.log(err)
+  });
   console.log('Is Access Token Valid:', isAccessTokenValid);
 
   if (!isAccessTokenValid) {
     const authUrls = ['/login', '/signup'];
     if (!authUrls.includes(pathname)) {
       console.log('Redirecting to /login');
-      return NextResponse.rewrite(new URL('/login', req.url));
+      return NextResponse.redirect(new URL('/login', req.url));
     }
   } else {
     if (pathname === '/login' || pathname === '/signup') {
       console.log('Redirecting to /');
-      return NextResponse.rewrite(new URL('/', req.url));
+      return NextResponse.redirect(new URL('/', req.url));
     }
   }
 
   console.log('Proceeding with request');
-  const res = NextResponse.next();
-  // res.cookies.set("accessToken", accessToken)
-  res.cookies.set({
-    name: 'accessToken',
-    value: accessToken ? accessToken : "",
-    path: '/'
-  })
-  return res;
+  return NextResponse.next();
 }
 
 export const config = {
@@ -57,18 +53,18 @@ export const config = {
   ],
 };
 
-function decodeToken(token: string): boolean {
-  try {
-    const decodedToken = jwt.decode(token) as jwt.JwtPayload;
+// function decodeToken(token: string): boolean {
+//   try {
+//     const decodedToken = jwt.decode(token) as jwt.JwtPayload;
 
-    if (!decodedToken || !decodedToken.exp) {
-      return false;
-    }
+//     if (!decodedToken || !decodedToken.exp) {
+//       return false;
+//     }
 
-    const currentTime = Math.floor(Date.now() / 1000);
-    return decodedToken.exp > currentTime;
-  } catch (err) {
-    console.error('Token decoding error:', err);
-    return false;
-  }
-}
+//     const currentTime = Math.floor(Date.now() / 1000);
+//     return decodedToken.exp > currentTime;
+//   } catch (err) {
+//     console.error('Token decoding error:', err);
+//     return false;
+//   }
+// }

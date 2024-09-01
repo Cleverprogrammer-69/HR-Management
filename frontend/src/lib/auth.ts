@@ -1,0 +1,27 @@
+import type { NextRequest, NextResponse } from 'next/server';
+import { SignJWT, jwtVerify } from 'jose';
+import { USER_TOKEN, getJwtSecretKey } from './constants';
+import { StringHeaderIdentifier } from '@tanstack/react-table';
+
+interface UserJwtPayload {
+  jti: string;
+  iat: number;
+}
+
+export class AuthError extends Error {}
+
+export async function verifyAuth(token: string) {
+  // const token = req.cookies.get(USER_TOKEN)?.value;
+
+  if (!token) throw new AuthError('Missing user token');
+
+  try {
+    const verified = await jwtVerify(
+      token,
+      new TextEncoder().encode(getJwtSecretKey())
+    );
+    return verified.payload as UserJwtPayload;
+  } catch (err) {
+    throw new AuthError('Your token has expired.');
+  }
+}
