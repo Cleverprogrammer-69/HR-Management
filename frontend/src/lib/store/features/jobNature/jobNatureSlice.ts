@@ -3,7 +3,6 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 import type { JobNatureResponse } from '@/types/jobNatureTypes';
 import Cookies from 'js-cookie';
-import { Cookie } from 'next/font/google';
 type InitialState = {
   jobNature: JobNatureResponse | null;
   jobNatureStatus: 'idle' | 'loading' | 'succeeded' | 'failed';
@@ -22,6 +21,9 @@ export const getAllJobNatures = createAsyncThunk(
     try {
       const response = await axios.get(`${process.env.HR_API_V1}/jobNature`, {
         withCredentials: true,
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       });
       return response.data;
     } catch (error: any) {
