@@ -31,9 +31,6 @@ export const loginUser = createAsyncThunk(
       const response = await axios.post(
         `${URL}/user/login`,
         userData,
-        {
-          withCredentials: true,
-        }
       );
 
       return response.data;
