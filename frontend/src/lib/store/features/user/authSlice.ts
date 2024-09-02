@@ -1,12 +1,15 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 import { extractErrorMessage } from '@/lib/extractErrorMsg';
+import Cookies from 'js-cookie';
+
 
 const initialState = {
   user: null,
   status: 'idle',
   error: null,
 };
+const getAccessToken = () => Cookies.get('accessToken')
 const URL = process.env.HR_API_V1
 export const signupUser = createAsyncThunk(
   'auth/signupUser',
@@ -45,6 +48,7 @@ export const logoutUser = createAsyncThunk(
   "auth/logoutUser",
   async (_, thunkAPI)=>{
     try {
+      const token = getAccessToken();
       const response = await axios.post(
         `${URL}/user/logout`,
         {},
@@ -52,10 +56,7 @@ export const logoutUser = createAsyncThunk(
           withCredentials: true,
           headers: {
             'Content-Type': 'application/json',
-            // Authorization: `Bearer ${document.cookie.replace(
-            //   /(?:(?:^|.*;\s*)accessToken\s*\=\s*([^;]*).*$)|^.*$/,
-            //   '$1'
-            // )}`, // Extract accessToken from cookies
+            Authorization: `Bearer ${token}`, // Extract accessToken from cookies
           },
         }
       );
