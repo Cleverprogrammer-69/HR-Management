@@ -57,7 +57,7 @@ const loginUser = asyncHandler(async(req,res)=>{
     if(!user){
       throw new ApiError(401, "User is not authenticated.")
     }
-    let {accessToken, refreshToken}= await getAccessAndRefreshTokens(user._id)
+    let { accessToken, refreshToken }= await getAccessAndRefreshTokens(user._id)
 
     let loggedInUser = await User.findById(user._id).select(
       "-password -refreshToken"
@@ -65,7 +65,7 @@ const loginUser = asyncHandler(async(req,res)=>{
    
     res
       .status(200)
-      .cookie("accessToken", accessToken, options)
+      // .cookie("accessToken", accessToken, options)
       .cookie("refreshToken", refreshToken, options)
       .json(
         new ApiResponse (200,{

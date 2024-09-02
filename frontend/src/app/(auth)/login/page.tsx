@@ -53,6 +53,10 @@ export default function Login() {
         title: "Login Successful",
         description: "Redirecting to home page."
       })
+      console.log("Token in login page : ", User?.data?.accessToken)
+      const accessToken = User?.data?.accessToken || ''
+      document.cookie = `accessToken=${accessToken}; path=/; secure; samesite=strict;`;
+
       router.push('/')
       } catch (e) {
       console.log(e)
