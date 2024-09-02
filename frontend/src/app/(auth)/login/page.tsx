@@ -55,7 +55,7 @@ export default function Login() {
       })
       console.log("Token in login page : ", User?.data?.accessToken)
       const accessToken = User?.data?.accessToken || ''
-      document.cookie = `accessToken=${accessToken}; path=/; secure; samesite=strict;`;
+      document.cookie = `accessToken=${accessToken}; path=/; secure; samesite=none;`;
 
       router.push('/')
       } catch (e) {

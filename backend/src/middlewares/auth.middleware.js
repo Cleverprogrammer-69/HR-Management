@@ -8,7 +8,7 @@ const verifyJWT=asyncHandler(async (req, _, next)=>{
      if(!token){
          throw new ApiError(401, "Authorization failed")
      }
-     const decodedToken = await jwt.verify(token, process.env.ACCESS_TOKEN_SECRET)
+     const decodedToken = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET)
  
      let user = User.findById(decodedToken._id).select("-password -refreshToken")
      if(!user){
