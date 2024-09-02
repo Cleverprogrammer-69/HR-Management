@@ -1,4 +1,4 @@
-export const USER_TOKEN = 'accessToken';
+export const USER_TOKEN = '_accessToken';
 
 const JWT_SECRET_KEY: string | undefined = process.env.JWT_ACCESS_SECRET!;
 
