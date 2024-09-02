@@ -60,6 +60,7 @@ export const logoutUser = createAsyncThunk(
           },
         }
       );
+      Cookies.remove("_accessToken")
       console.log(response.data)
       return response.data
     } catch (error : any) {
