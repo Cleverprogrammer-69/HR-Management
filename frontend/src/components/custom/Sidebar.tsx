@@ -26,9 +26,9 @@ import { store } from '@/lib/store/store';
 export default function Sidebar() {
   const employees = store.getState().employee.employee?.data;
   return (
-    <Command className="bg-card">
+    <Command className="bg-card overflow-y-auto">
       <CommandInput placeholder="Type a command or search..." />
-      <CommandList className="min-h-[85vh] overflow-y-auto">
+      <CommandList className="min-h-[75vh] overflow-y-auto">
         <CommandEmpty>No results found.</CommandEmpty>
 
         <CommandGroup heading="Suggestions">

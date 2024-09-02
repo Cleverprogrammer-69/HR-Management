@@ -23,7 +23,7 @@ export default function ClientLayout({
 
       <div className="flex">
         <div
-          className={`fixed top-11 left-0 h-full w-[250px] transition-transform transform ${
+          className={`fixed overflow-y-auto top-11 left-0 h-full w-[250px] transition-transform transform ${
             sideBarOpen ? 'translate-x-0' : '-translate-x-full'
           } z-40`}
         >
