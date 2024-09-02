@@ -21,6 +21,7 @@ export const signupUser = createAsyncThunk(
 
       return response.data;
     } catch (error: any) {
+      console.log(error.response?.data)
       const errorMsg = extractErrorMessage(error.response?.data);
       return thunkAPI.rejectWithValue(errorMsg || 'An error occurred during signup.');
     }
@@ -38,6 +39,7 @@ export const loginUser = createAsyncThunk(
 
       return response.data;
     } catch (error: any) {
+      console.log(error.response?.data)
       const errorMsg = extractErrorMessage(error.response?.data);
       return thunkAPI.rejectWithValue(errorMsg || 'An error occurred during signup.');
     }
