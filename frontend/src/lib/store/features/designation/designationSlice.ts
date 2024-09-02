@@ -2,6 +2,7 @@ import { extractErrorMessage } from '@/lib/extractErrorMsg';
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 import type { DesignationResponse } from '@/types/designationTypes';
+import Cookies from 'js-cookie';
 type InitialState = {
   designation: DesignationResponse | null;
   designationStatus: 'idle' | 'loading' | 'succeeded' | 'failed';
@@ -12,12 +13,17 @@ const initialState: InitialState = {
   designationStatus: 'idle',
   designationError: null,
 };
+const getAccessToken = () => Cookies.get('accessToken');
 export const getAllDesignations = createAsyncThunk(
   'designation/getAll',
   async (_, thunkAPI) => {
+    const token = getAccessToken();
     try {
       const response = await axios.get(`${process.env.HR_API_V1}/designation`, {
         withCredentials: true,
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       });
       return response.data;
     } catch (error: any) {
@@ -31,11 +37,17 @@ export const getAllDesignations = createAsyncThunk(
 export const newDesignation = createAsyncThunk(
   'designation/new',
   async (data: any, thunkAPI) => {
+    const token = getAccessToken();
     try {
       const response = await axios.post(
         `${process.env.HR_API_V1}/designation`,
         data,
-        { withCredentials: true }
+        {
+          withCredentials: true,
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
       );
       return response.data;
     } catch (error: any) {
@@ -50,10 +62,16 @@ export const newDesignation = createAsyncThunk(
 export const getOneDesignation = createAsyncThunk(
   'designation/getOne',
   async (designationId: string | string[], thunkAPI) => {
+    const token = getAccessToken();
     try {
       const response = await axios.get(
         `${process.env.HR_API_V1}/designation/${designationId}`,
-        { withCredentials: true }
+        {
+          withCredentials: true,
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
       );
       return response.data;
     } catch (error: any) {
@@ -68,10 +86,16 @@ export const getOneDesignation = createAsyncThunk(
 export const deleteOneDesignation = createAsyncThunk(
   'designation/deleteOne',
   async (designationId: string | string[], thunkAPI) => {
+    const token = getAccessToken();
     try {
       const response = await axios.delete(
         `${process.env.HR_API_V1}/designation/${designationId}`,
-        { withCredentials: true }
+        {
+          withCredentials: true,
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
       );
       return response.data;
     } catch (error: any) {
@@ -86,12 +110,18 @@ export const deleteOneDesignation = createAsyncThunk(
 export const updateDesignation = createAsyncThunk(
   'designation/update',
   async (data: any, thunkAPI) => {
+    const token = getAccessToken();
     const { designationId, designationData } = data;
     try {
       const response = await axios.patch(
         `${process.env.HR_API_V1}/designation/${designationId}`,
         designationData,
-        { withCredentials: true }
+        {
+          withCredentials: true,
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
       );
       return response.data;
     } catch (error: any) {

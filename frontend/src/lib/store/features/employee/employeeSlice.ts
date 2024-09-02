@@ -2,6 +2,7 @@ import { extractErrorMessage } from '@/lib/extractErrorMsg';
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 import type { EmployeeResponse } from '@/types/employeeTypes';
+import Cookies from 'js-cookie';
 type InitialState = {
   employee: EmployeeResponse | null;
   employeeStatus: 'idle' | 'loading' | 'succeeded' | 'failed';
@@ -12,12 +13,17 @@ const initialState: InitialState = {
   employeeStatus: 'idle',
   employeeError: null,
 };
+const getAccessToken = () => Cookies.get('accessToken');
 export const getAllEmployees = createAsyncThunk(
   'employee/getAll',
   async (_, thunkAPI) => {
+    const token = getAccessToken();
     try {
       const response = await axios.get(`${process.env.HR_API_V1}/employee`, {
         withCredentials: true,
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       });
       return response.data;
     } catch (error: any) {
@@ -31,11 +37,17 @@ export const getAllEmployees = createAsyncThunk(
 export const newEmployee = createAsyncThunk(
   'employee/new',
   async (data: any, thunkAPI) => {
+    const token = getAccessToken();
     try {
       const response = await axios.post(
         `${process.env.HR_API_V1}/employee`,
         data,
-        { withCredentials: true }
+        {
+          withCredentials: true,
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
       );
       return response.data;
     } catch (error: any) {
@@ -50,10 +62,16 @@ export const newEmployee = createAsyncThunk(
 export const getOneEmployee = createAsyncThunk(
   'employee/getOne',
   async (employeeId: string | string[], thunkAPI) => {
+    const token = getAccessToken();
     try {
       const response = await axios.get(
         `${process.env.HR_API_V1}/employee/${employeeId}`,
-        { withCredentials: true }
+        {
+          withCredentials: true,
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
       );
       return response.data;
     } catch (error: any) {
@@ -67,41 +85,54 @@ export const getOneEmployee = createAsyncThunk(
 
 export const deleteOneEmployee = createAsyncThunk(
   'employee/deleteOne',
-  async(employeeId: string | string[], thunkAPI)=>{
+  async (employeeId: string | string[], thunkAPI) => {
+    const token = getAccessToken();
     try {
-      const response = await axios.delete(`${process.env.HR_API_V1}/employee/${employeeId}`,
-        {withCredentials: true}
-      )
-      return response.data
+      const response = await axios.delete(
+        `${process.env.HR_API_V1}/employee/${employeeId}`,
+        {
+          withCredentials: true,
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      return response.data;
     } catch (error: any) {
-      const errorMsg = extractErrorMessage(error.response?.data)
+      const errorMsg = extractErrorMessage(error.response?.data);
       return thunkAPI.rejectWithValue(
-        errorMsg || "Something went wrong while deleting employee."
-      )
+        errorMsg || 'Something went wrong while deleting employee.'
+      );
     }
   }
-)
+);
 
 export const updateEmployee = createAsyncThunk(
   'employee/update',
-  async(data:any, thunkAPI) => {
-    const {employeeId, employeeData} = data
+  async (data: any, thunkAPI) => {
+    const token = getAccessToken();
+    const { employeeId, employeeData } = data;
     try {
-      console.log(employeeData.get("emp_name"))
+      console.log(employeeData.get('emp_name'));
       const response = await axios.patch(
         `${process.env.HR_API_V1}/employee/${employeeId}`,
         employeeData,
-        {withCredentials: true}
-      )
-      return response.data
+        {
+          withCredentials: true,
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      return response.data;
     } catch (error: any) {
-      const errorMsg = extractErrorMessage(error.response.data)
+      const errorMsg = extractErrorMessage(error.response.data);
       return thunkAPI.rejectWithValue(
-        errorMsg || "Something went wrong while update employee."
-      )
+        errorMsg || 'Something went wrong while update employee.'
+      );
     }
   }
-)
+);
 const employeeSlice = createSlice({
   name: 'employee',
   initialState,
@@ -177,7 +208,6 @@ const employeeSlice = createSlice({
       state.employeeError = action.payload;
       state.employeeStatus = 'failed';
     });
-
   },
 });
 export default employeeSlice.reducer;

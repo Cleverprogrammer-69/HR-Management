@@ -56,7 +56,7 @@ export const logoutUser = createAsyncThunk(
           withCredentials: true,
           headers: {
             'Content-Type': 'application/json',
-            Authorization: `Bearer ${token}`, // Extract accessToken from cookies
+            Authorization: `Bearer ${token}`,
           },
         }
       );

@@ -2,6 +2,7 @@ import { extractErrorMessage } from '@/lib/extractErrorMsg';
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 import type { DepartmentResponse } from '@/types/departmentTypes';
+import Cookies from 'js-cookie';
 type InitialState = {
   department: DepartmentResponse | null;
   departmentStatus: 'idle' | 'loading' | 'succeeded' | 'failed';
@@ -12,12 +13,17 @@ const initialState: InitialState = {
   departmentStatus: 'idle',
   departmentError: null,
 };
+const getAccessToken = () => Cookies.get("accessToken")
 export const getAllDepartments = createAsyncThunk(
   'department/getAll',
   async (_, thunkAPI) => {
+    const token = getAccessToken()
     try {
       const response = await axios.get(`${process.env.HR_API_V1}/department`, {
         withCredentials: true,
+        headers:{
+          Authorization: `Bearer ${token}`
+        }
       });
       return response.data;
     } catch (error: any) {
@@ -31,11 +37,16 @@ export const getAllDepartments = createAsyncThunk(
 export const newDepartment = createAsyncThunk(
   'department/new',
   async (data: any, thunkAPI) => {
+    const token = getAccessToken()
     try {
       const response = await axios.post(
         `${process.env.HR_API_V1}/department`,
         data,
-        { withCredentials: true }
+        { withCredentials: true,
+          headers:{
+            Authorization: `Bearer ${token}`
+          }
+         }
       );
       return response.data;
     } catch (error: any) {
@@ -50,10 +61,15 @@ export const newDepartment = createAsyncThunk(
 export const getOneDepartment = createAsyncThunk(
   'department/getOne',
   async (departmentId: string | string[], thunkAPI) => {
+    const token = getAccessToken()
     try {
       const response = await axios.get(
         `${process.env.HR_API_V1}/department/${departmentId}`,
-        { withCredentials: true }
+        { withCredentials: true,
+          headers:{
+            Authorization: `Bearer ${token}`
+          }
+         }
       );
       return response.data;
     } catch (error: any) {
@@ -68,10 +84,15 @@ export const getOneDepartment = createAsyncThunk(
 export const deleteOneDepartment = createAsyncThunk(
   'department/deleteOne',
   async (departmentId: string | string[], thunkAPI) => {
+    const token = getAccessToken()
     try {
       const response = await axios.delete(
         `${process.env.HR_API_V1}/department/${departmentId}`,
-        { withCredentials: true }
+        { withCredentials: true,
+          headers:{
+            Authorization: `Bearer ${token}`
+          }
+         }
       );
       return response.data;
     } catch (error: any) {
@@ -86,12 +107,17 @@ export const deleteOneDepartment = createAsyncThunk(
 export const updateDepartment = createAsyncThunk(
   'department/update',
   async (data: any, thunkAPI) => {
+    const token = getAccessToken()
     const { departmentId, departmentData } = data;
     try {
       const response = await axios.patch(
         `${process.env.HR_API_V1}/department/${departmentId}`,
         departmentData,
-        { withCredentials: true }
+        { withCredentials: true,
+          headers:{
+            Authorization: `Bearer ${token}`
+          }
+         }
       );
       return response.data;
     } catch (error: any) {

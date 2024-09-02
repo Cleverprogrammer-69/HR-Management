@@ -2,6 +2,8 @@ import { extractErrorMessage } from '@/lib/extractErrorMsg';
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 import type { JobNatureResponse } from '@/types/jobNatureTypes';
+import Cookies from 'js-cookie';
+import { Cookie } from 'next/font/google';
 type InitialState = {
   jobNature: JobNatureResponse | null;
   jobNatureStatus: 'idle' | 'loading' | 'succeeded' | 'failed';
@@ -12,9 +14,11 @@ const initialState: InitialState = {
   jobNatureStatus: 'idle',
   jobNatureError: null,
 };
+const getAccessToken = () => Cookies.get('accessToken');
 export const getAllJobNatures = createAsyncThunk(
   'jobNature/getAll',
   async (_, thunkAPI) => {
+    const token = getAccessToken();
     try {
       const response = await axios.get(`${process.env.HR_API_V1}/jobNature`, {
         withCredentials: true,
@@ -31,11 +35,17 @@ export const getAllJobNatures = createAsyncThunk(
 export const newJobNature = createAsyncThunk(
   'jobNature/new',
   async (data: any, thunkAPI) => {
+    const token = getAccessToken();
     try {
       const response = await axios.post(
         `${process.env.HR_API_V1}/jobNature`,
         data,
-        { withCredentials: true }
+        {
+          withCredentials: true,
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
       );
       return response.data;
     } catch (error: any) {
@@ -50,6 +60,7 @@ export const newJobNature = createAsyncThunk(
 export const getOneJobNature = createAsyncThunk(
   'jobNature/getOne',
   async (jobNatureId: string | string[], thunkAPI) => {
+    const token = getAccessToken();
     try {
       const response = await axios.get(
         `${process.env.HR_API_V1}/jobNature/${jobNatureId}`,
@@ -68,10 +79,16 @@ export const getOneJobNature = createAsyncThunk(
 export const deleteOneJobNature = createAsyncThunk(
   'jobNature/deleteOne',
   async (jobNatureId: string | string[], thunkAPI) => {
+    const token = getAccessToken();
     try {
       const response = await axios.delete(
         `${process.env.HR_API_V1}/jobNature/${jobNatureId}`,
-        { withCredentials: true }
+        {
+          withCredentials: true,
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
       );
       return response.data;
     } catch (error: any) {
@@ -86,12 +103,18 @@ export const deleteOneJobNature = createAsyncThunk(
 export const updateJobNature = createAsyncThunk(
   'jobNature/update',
   async (data: any, thunkAPI) => {
+    const token = getAccessToken();
     const { jobNatureId, jobNatureData } = data;
     try {
       const response = await axios.patch(
         `${process.env.HR_API_V1}/jobNature/${jobNatureId}`,
         jobNatureData,
-        { withCredentials: true }
+        {
+          withCredentials: true,
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
       );
       return response.data;
     } catch (error: any) {
