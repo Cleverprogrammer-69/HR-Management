@@ -48,8 +48,17 @@ export const logoutUser = createAsyncThunk(
       const response = await axios.post(
         `${URL}/user/logout`,
         {},
-        {withCredentials:true},
-      )
+        {
+          withCredentials: true,
+          headers: {
+            'Content-Type': 'application/json',
+            // Authorization: `Bearer ${document.cookie.replace(
+            //   /(?:(?:^|.*;\s*)accessToken\s*\=\s*([^;]*).*$)|^.*$/,
+            //   '$1'
+            // )}`, // Extract accessToken from cookies
+          },
+        }
+      );
       console.log(response.data)
       return response.data
     } catch (error : any) {
