@@ -4,10 +4,7 @@ import { verifyAuth } from './lib/auth';
 export async function middleware(req: NextRequest) {
   const path = req.nextUrl.pathname;
   const isPublicPath = path === '/login' || path === '/signup'
-  console.log("Cookies in middleware", req.cookies.getAll())
-  console.log(req.headers)
-  console.log('Middleware triggered');
-  console.log('Pathname:', path);
+  
 
   const isAccessTokenValid = await verifyAuth(req).catch(err=>{
     console.log(err)
