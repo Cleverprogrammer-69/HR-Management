@@ -58,9 +58,9 @@ export default function Login() {
       const accessToken = User?.data?.accessToken || '';
       const refreshToken = User?.data?.refreshToken || '';
 
-      document.cookie = `_accessToken=${_accessToken};secure;`;
-      document.cookie = `accessToken=${accessToken};secure;`;
-      document.cookie = `refreshToken=${refreshToken};secure;`;
+      document.cookie = `_accessToken=${_accessToken};secure;samesite=none`;
+      document.cookie = `accessToken=${accessToken};secure;samesite=none`;
+      document.cookie = `refreshToken=${refreshToken};secure;samesite=none`;
 
       router.push('/');
     } catch (e) {
