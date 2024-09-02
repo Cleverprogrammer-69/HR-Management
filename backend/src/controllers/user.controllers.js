@@ -9,7 +9,6 @@ import { getAccessAndRefreshTokens } from "../utils/tokenGenerator.js"
  const options = {
    httpOnly: true,
    secure: true,
-   path: "/",
 };
 
 const registerUser = asyncHandler(async (req, res) => {

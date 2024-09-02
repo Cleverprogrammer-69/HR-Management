@@ -1,11 +1,11 @@
-"use client";
+'use client';
 
-import { useState } from 'react'
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import axios from "axios";
-import { z } from "zod";
-import { Button } from "@/components/ui/button";
+import { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import axios from 'axios';
+import { z } from 'zod';
+import { Button } from '@/components/ui/button';
 import {
   Form,
   FormControl,
@@ -13,58 +13,63 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { toast } from "@/components/ui/use-toast";
-import { EyeIcon, EyeOffIcon } from "lucide-react";
-import { loginUser } from "@/lib/store/features/user/authSlice";
+} from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
+import { toast } from '@/components/ui/use-toast';
+import { EyeIcon, EyeOffIcon } from 'lucide-react';
+import { loginUser } from '@/lib/store/features/user/authSlice';
 import { redirect, useRouter } from 'next/navigation';
 import { useAppDispatch, useAppSelector } from '@/lib/hooks/hooks';
 import Link from 'next/link';
 const FormSchema = z.object({
   identifier: z.string().trim().min(2, {
-    message: "Identifier must be 2 characters.",
+    message: 'Identifier must be 2 characters.',
   }),
   password: z.string().min(8, {
-    message: "Password must be at least 8 characters.",
+    message: 'Password must be at least 8 characters.',
   }),
 });
 
 export default function Login() {
-  const dispatch = useAppDispatch()
-  const [passwordVisible, setPasswordVisible] = useState(false); 
-  const {status, error, user} = useAppSelector(state => state.auth)
-  const router = useRouter()
+  const dispatch = useAppDispatch();
+  const [passwordVisible, setPasswordVisible] = useState(false);
+  const { status, error, user } = useAppSelector((state) => state.auth);
+  const router = useRouter();
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
-      identifier: "",
-      password: "",
+      identifier: '',
+      password: '',
     },
   });
-  
+
   async function onSubmit(data: z.infer<typeof FormSchema>) {
-    console.log("Form Data Submitted:", data); 
+    console.log('Form Data Submitted:', data);
     try {
       const User = await dispatch(loginUser(data)).unwrap();
       // console.log(User)
       toast({
-        variant: "default",
-        title: "Login Successful",
-        description: "Redirecting to home page."
-      })
-      console.log("Token in login page : ", User?.data?.accessToken)
-      const _accessToken = User?.data?.accessToken || ''
-      document.cookie = `_accessToken=${_accessToken}; path=/; secure;`;
+        variant: 'default',
+        title: 'Login Successful',
+        description: 'Redirecting to home page.',
+      });
+      console.log('Token in login page : ', User?.data?.accessToken);
+      const _accessToken = User?.data?.accessToken || '';
+      const accessToken = User?.data?.accessToken || '';
+      const refreshToken = User?.data?.refreshToken || '';
 
-      router.push('/')
-      } catch (e) {
-      console.log(e)
+      document.cookie = `_accessToken=${_accessToken};secure;`;
+      document.cookie = `accessToken=${accessToken};secure;`;
+      document.cookie = `refreshToken=${refreshToken};secure;`;
+
+      router.push('/');
+    } catch (e) {
+      console.log(e);
       toast({
-        title: "Login Failed",
+        title: 'Login Failed',
         description: e as string,
-        variant: "destructive"
-      })
+        variant: 'destructive',
+      });
     }
   }
   return (
@@ -78,7 +83,10 @@ export default function Login() {
           <span className="font-semibold text-sm text-foreground">
             Don&#39;t have an account?{' '}
           </span>
-          <Link href={'/signup'} className="text-primary ml-1 font-bold underline">
+          <Link
+            href={'/signup'}
+            className="text-primary ml-1 font-bold underline"
+          >
             Sign Up
           </Link>
         </div>
@@ -91,7 +99,11 @@ export default function Login() {
             <FormItem>
               <FormLabel>Username or Email</FormLabel>
               <FormControl>
-                <Input placeholder="username or email" {...field} className='bg-input' />
+                <Input
+                  placeholder="username or email"
+                  {...field}
+                  className="bg-input"
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -110,8 +122,8 @@ export default function Login() {
                   <Input
                     type={passwordVisible ? 'text' : 'password'}
                     placeholder="password"
-                    {...field} 
-                    className='bg-input'
+                    {...field}
+                    className="bg-input"
                   />
                 </FormControl>
                 <button
@@ -130,7 +142,11 @@ export default function Login() {
             </FormItem>
           )}
         />
-        <Button type="submit" className="w-full" disabled={status === 'loading' || status === 'success'}>
+        <Button
+          type="submit"
+          className="w-full"
+          disabled={status === 'loading' || status === 'success'}
+        >
           Login
         </Button>
       </form>
