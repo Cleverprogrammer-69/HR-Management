@@ -54,7 +54,7 @@ const loginUser = asyncHandler(async(req,res)=>{
     //validation
     let user = await userLoginValidator({identifier, password})
     if(!user){
-      throw new ApiError(401, "User is not authenticated.")
+      throw new ApiError(401, "User is not authenticated.", ['User is not authenticated.'])
     }
     let { accessToken, refreshToken }= await getAccessAndRefreshTokens(user._id)
 

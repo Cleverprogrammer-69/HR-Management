@@ -76,14 +76,14 @@ const userLoginValidator = async (userCredentials) => {
     });
 
     if (!user) {
-      throw new ApiError(404, "User not found with the provided credentials.");
+      throw new ApiError(404, "User not found with the provided credentials.", ['User not found.']);
     }
 
     
     const isPasswordCorrect = await user.isPasswordCorrect(password);
 
     if (!isPasswordCorrect) {
-      throw new ApiError(401, "Invalid password.");
+      throw new ApiError(401, "Invalid password.",["invalid password."]);
     }
 
     return user;

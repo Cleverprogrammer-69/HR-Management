@@ -18,6 +18,7 @@ import jobTypeRouter from './routes/jobType.routes.js'
 import jobNatureRouter from "./routes/jobNature.routes.js";
 import designationRouter from "./routes/designation.routes.js";
 import employeeRouter from "./routes/employee.routes.js";
+import errorHandler from './middlewares/errorHandler.js'
 
 
 app.use("/api/v1/user", userRouter);
@@ -31,5 +32,7 @@ app.use("/api/v1/jobNature", jobNatureRouter);
 app.use("/api/v1/designation", designationRouter);
 
 app.use("/api/v1/employee", employeeRouter);
+
+app.use(errorHandler)
 
 export {app}
