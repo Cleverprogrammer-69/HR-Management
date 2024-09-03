@@ -21,6 +21,7 @@ import { signupUser } from '@/lib/store/features/user/authSlice';
 import { useAppDispatch } from '@/lib/hooks/hooks';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import { ThemeToggler } from '@/components/custom/Theme/ThemeToggler';
 
 const FormSchema = z.object({
   username: z.string().trim().min(2, {
@@ -42,8 +43,8 @@ const FormSchema = z.object({
 
 export default function Signup() {
   const dispatch = useAppDispatch();
-  const router = useRouter()
-  const [passwordVisible, setPasswordVisible] = useState(false); 
+  const router = useRouter();
+  const [passwordVisible, setPasswordVisible] = useState(false);
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
@@ -68,7 +69,7 @@ export default function Signup() {
         description: 'You have successfully signed up.',
         variant: 'default',
       });
-      router.push('/login')
+      router.push('/login');
     } catch (error) {
       // Handle error
       console.error('Signup failed:', error);
@@ -79,7 +80,6 @@ export default function Signup() {
       });
     }
   }
-  
 
   return (
     <Form {...form}>
@@ -87,7 +87,11 @@ export default function Signup() {
         onSubmit={form.handleSubmit(onSubmit)}
         className="w-screen space-y-3 mx-auto bg-card p-9 h-[130vh] md:w-2/5 md:h-2/3 md:mt-10 md:rounded-lg"
       >
-        <h2 className="mt-0 font-extrabold text-xl">Create your account</h2>
+        <div className="flex justify-between">
+          <h2 className="mt-0 font-extrabold text-xl">Create your account</h2>
+          <ThemeToggler />
+        </div>
+
         <div className="mt-2 p-0">
           <span className="font-semibold text-sm text-foreground">
             Have an account?{' '}
@@ -107,7 +111,11 @@ export default function Signup() {
             <FormItem>
               <FormLabel>Email</FormLabel>
               <FormControl>
-                <Input placeholder="john122@yahoo.com" {...field} className="bg-input" />
+                <Input
+                  placeholder="john122@yahoo.com"
+                  {...field}
+                  className="bg-secondary dark:bg-input"
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -121,7 +129,11 @@ export default function Signup() {
             <FormItem>
               <FormLabel>Username</FormLabel>
               <FormControl>
-                <Input placeholder="john213" {...field} className="bg-input" />
+                <Input
+                  placeholder="john213"
+                  {...field}
+                  className="bg-secondary dark:bg-input"
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -135,7 +147,11 @@ export default function Signup() {
             <FormItem>
               <FormLabel>Full Name</FormLabel>
               <FormControl>
-                <Input placeholder="john greg" {...field} className="bg-input" />
+                <Input
+                  placeholder="john greg"
+                  {...field}
+                  className="bg-secondary dark:bg-input"
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -149,7 +165,11 @@ export default function Signup() {
             <FormItem>
               <FormLabel>Phone</FormLabel>
               <FormControl>
-                <Input placeholder="3402349933" {...field} className="bg-input" />
+                <Input
+                  placeholder="3402349933"
+                  {...field}
+                  className="bg-secondary dark:bg-input"
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -167,8 +187,8 @@ export default function Signup() {
                   <Input
                     type={passwordVisible ? 'text' : 'password'}
                     placeholder="password"
-                    {...field} 
-                    className="bg-input"
+                    {...field}
+                    className="bg-secondary dark:bg-input"
                   />
                 </FormControl>
                 <button

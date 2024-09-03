@@ -1,5 +1,5 @@
 'use client';
-import * as React from 'react'
+import * as React from 'react';
 import {
   ColumnDef,
   flexRender,
@@ -21,8 +21,7 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import {Input} from '@/components/ui/input';
-
+import { Input } from '@/components/ui/input';
 
 import { useAppDispatch, useAppSelector } from '@/lib/store/store';
 import { getAllJobNatures } from '@/lib/store/features/jobNature/jobNatureSlice';
@@ -40,12 +39,11 @@ export function DataTable<TData, TValue>({
   data,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
-  const {jobNature} = useAppSelector(state => state.jobNature)
+  const { jobNature } = useAppSelector((state) => state.jobNature);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
   );
 
-  
   const table = useReactTable({
     data,
     columns,
@@ -65,9 +63,11 @@ export function DataTable<TData, TValue>({
     <div className="bg-card p-5 rounded-lg">
       <div className="flex justify-between items-center">
         <h1 className="text-2xl font-extrabold">JobNatures</h1>
-        <span className='text-md font-bold'>Total: {jobNature?.data.length}</span>
+        <span className="text-md font-bold">
+          Total: {jobNature?.data.length}
+        </span>
       </div>
-      
+
       <div className="flex items-center justify-between space-x-2 py-4">
         <Input
           placeholder="Filter names..."
@@ -75,7 +75,7 @@ export function DataTable<TData, TValue>({
           onChange={(event) =>
             table.getColumn('name')?.setFilterValue(event.target.value)
           }
-          className="max-w-sm bg-input"
+          className="max-w-sm bg-secondary dark:bg-input"
         />
         <Button variant={'default'}>
           <Link href={'/jobNature/new'}>+ New</Link>

@@ -1,4 +1,3 @@
-import { extractErrorMessage } from '@/lib/extractErrorMsg';
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 import type { JobTypeResponse } from '@/types/jobTypeTypes';
@@ -13,7 +12,7 @@ const initialState: InitialState = {
   jobTypeStatus: 'idle',
   jobTypeError: null,
 };
-const URL = process.env.HR_API_V1
+const URL = process.env.HR_API_V1;
 const getAccessToken = () => Cookies.get('accessToken');
 export const getAllJobTypes = createAsyncThunk(
   'jobType/getAll',
@@ -26,9 +25,9 @@ export const getAllJobTypes = createAsyncThunk(
       });
       return response.data;
     } catch (error: any) {
-      const errorMsg = extractErrorMessage(error.response?.data);
       return thunkAPI.rejectWithValue(
-        errorMsg || 'Something went wrong while fetching all job types.'
+        error.response?.data?.message ||
+          'Something went wrong while fetching all job types.'
       );
     }
   }
@@ -45,9 +44,9 @@ export const newJobType = createAsyncThunk(
       });
       return response.data;
     } catch (error: any) {
-      const errorMsg = extractErrorMessage(error.response?.data);
       return thunkAPI.rejectWithValue(
-        errorMsg || 'Something went wrong while creating a new job type.'
+        error.response?.data?.message ||
+          'Something went wrong while creating a new job type.'
       );
     }
   }
@@ -64,9 +63,9 @@ export const getOneJobType = createAsyncThunk(
       });
       return response.data;
     } catch (error: any) {
-      const errorMsg = extractErrorMessage(error.response?.data);
       return thunkAPI.rejectWithValue(
-        errorMsg || 'Something went wrong while fetching the job type.'
+        error.response?.data?.message ||
+          'Something went wrong while fetching the job type.'
       );
     }
   }
@@ -77,18 +76,15 @@ export const deleteOneJobType = createAsyncThunk(
   async (jobTypeId: string | string[], thunkAPI) => {
     try {
       const token = getAccessToken();
-      const response = await axios.delete(
-        `${URL}/jobtype/${jobTypeId}`,
-        {
-          headers: { Authorization: `Bearer ${token}` },
-          withCredentials: true,
-        }
-      );
+      const response = await axios.delete(`${URL}/jobtype/${jobTypeId}`, {
+        headers: { Authorization: `Bearer ${token}` },
+        withCredentials: true,
+      });
       return response.data;
     } catch (error: any) {
-      const errorMsg = extractErrorMessage(error.response?.data);
       return thunkAPI.rejectWithValue(
-        errorMsg || 'Something went wrong while deleting the job type.'
+        error.response?.data?.message ||
+          'Something went wrong while deleting the job type.'
       );
     }
   }
@@ -110,9 +106,9 @@ export const updateJobType = createAsyncThunk(
       );
       return response.data;
     } catch (error: any) {
-      const errorMsg = extractErrorMessage(error.response.data);
       return thunkAPI.rejectWithValue(
-        errorMsg || 'Something went wrong while updating the job type.'
+        error.response?.data?.message ||
+          'Something went wrong while updating the job type.'
       );
     }
   }

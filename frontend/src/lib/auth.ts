@@ -18,7 +18,6 @@ export async function verifyAuth(req: NextRequest) {
       token,
       new TextEncoder().encode(getJwtSecretKey())
     );
-    console.log('Verified : ',verified.payload as UserJwtPayload)
     return verified.payload as UserJwtPayload;
   } catch (err) {
     throw new AuthError('Your token has expired.');

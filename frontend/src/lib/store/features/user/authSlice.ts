@@ -1,19 +1,17 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
-import { extractErrorMessage } from '@/lib/extractErrorMsg';
 import Cookies from 'js-cookie';
-
 
 const initialState = {
   user: null,
   status: 'idle',
   error: null,
 };
-const getAccessToken = () => Cookies.get('accessToken')
-const URL = process.env.HR_API_V1
+const getAccessToken = () => Cookies.get('accessToken');
+const URL = process.env.HR_API_V1;
 export const signupUser = createAsyncThunk(
   'auth/signupUser',
-  async (userData:any, thunkAPI) => {
+  async (userData: any, thunkAPI) => {
     try {
       const response = await axios.post(`${URL}/user/register`, userData, {
         withCredentials: true,
@@ -21,34 +19,33 @@ export const signupUser = createAsyncThunk(
 
       return response.data;
     } catch (error: any) {
-      console.log(error.response?.data)
-      const errorMsg = extractErrorMessage(error.response?.data);
-      return thunkAPI.rejectWithValue(errorMsg || 'An error occurred during signup.');
+      console.log(error.response?.data);
+      return thunkAPI.rejectWithValue(
+        error.response?.data?.message || 'An error occurred during signup.'
+      );
     }
   }
 );
 
 export const loginUser = createAsyncThunk(
   'auth/loginUser',
-  async (userData:any, thunkAPI) => {
+  async (userData: any, thunkAPI) => {
     try {
-      const response = await axios.post(
-        `${URL}/user/login`,
-        userData,
-      );
+      const response = await axios.post(`${URL}/user/login`, userData);
 
       return response.data;
     } catch (error: any) {
-      console.log(error.response?.data)
-      const errorMsg = extractErrorMessage(error.response?.data);
-      return thunkAPI.rejectWithValue(errorMsg || 'An error occurred during signup.');
+      console.log(error.response.data.message);
+      return thunkAPI.rejectWithValue(
+        error.response?.data?.message || 'An error occurred during login.'
+      );
     }
   }
 );
 
 export const logoutUser = createAsyncThunk(
-  "auth/logoutUser",
-  async (_, thunkAPI)=>{
+  'auth/logoutUser',
+  async (_, thunkAPI) => {
     try {
       const token = getAccessToken();
       const response = await axios.post(
@@ -62,23 +59,21 @@ export const logoutUser = createAsyncThunk(
           },
         }
       );
-      Cookies.remove("_accessToken")
-      console.log(response.data)
-      return response.data
-    } catch (error : any) {
-      const errorMsg = extractErrorMessage(error.response?.data)
+      Cookies.remove('_accessToken');
+      console.log(response.data);
+      return response.data;
+    } catch (error: any) {
       return thunkAPI.rejectWithValue(
-        errorMsg || 'An error occurred during logout.'
+        error.response?.data?.message || 'An error occurred during logout.'
       );
     }
   }
-)
+);
 
 const authSlice = createSlice({
   name: 'auth',
   initialState,
-  reducers: {
-  },
+  reducers: {},
   extraReducers: (builder) => {
     builder
       .addCase(signupUser.pending, (state) => {
@@ -94,7 +89,7 @@ const authSlice = createSlice({
         state.status = 'failed';
         state.error = action.payload;
       })
-      
+
       .addCase(loginUser.pending, (state) => {
         state.status = 'loading';
         state.error = null;
@@ -118,10 +113,10 @@ const authSlice = createSlice({
         state.user = action.payload;
         state.error = null;
       })
-      .addCase(logoutUser.rejected, (state, action : any) => {
+      .addCase(logoutUser.rejected, (state, action: any) => {
         state.status = 'failed';
         state.error = action.payload;
-      })
+      });
   },
 });
 

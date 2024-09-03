@@ -1,4 +1,3 @@
-import { extractErrorMessage } from '@/lib/extractErrorMsg';
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 import type { EmployeeResponse } from '@/types/employeeTypes';
@@ -27,9 +26,9 @@ export const getAllEmployees = createAsyncThunk(
       });
       return response.data;
     } catch (error: any) {
-      const errorMsg = extractErrorMessage(error.response?.data);
       return thunkAPI.rejectWithValue(
-        errorMsg || 'Something went wrong while fetching all employees.'
+        error.response?.data?.message ||
+          'Something went wrong while fetching all employees.'
       );
     }
   }
@@ -51,9 +50,9 @@ export const newEmployee = createAsyncThunk(
       );
       return response.data;
     } catch (error: any) {
-      const errorMsg = extractErrorMessage(error.response?.data);
       return thunkAPI.rejectWithValue(
-        errorMsg || 'Something went wrong while while creating new employee.'
+        error.response?.data?.message ||
+          'Something went wrong while while creating new employee.'
       );
     }
   }
@@ -75,9 +74,9 @@ export const getOneEmployee = createAsyncThunk(
       );
       return response.data;
     } catch (error: any) {
-      const errorMsg = extractErrorMessage(error.response?.data);
       return thunkAPI.rejectWithValue(
-        errorMsg || 'Something went wrong while while creating new employee.'
+        error.response?.data?.message ||
+          'Something went wrong while while creating new employee.'
       );
     }
   }
@@ -99,9 +98,9 @@ export const deleteOneEmployee = createAsyncThunk(
       );
       return response.data;
     } catch (error: any) {
-      const errorMsg = extractErrorMessage(error.response?.data);
       return thunkAPI.rejectWithValue(
-        errorMsg || 'Something went wrong while deleting employee.'
+        error.response?.data?.message ||
+          'Something went wrong while deleting employee.'
       );
     }
   }
@@ -126,9 +125,9 @@ export const updateEmployee = createAsyncThunk(
       );
       return response.data;
     } catch (error: any) {
-      const errorMsg = extractErrorMessage(error.response.data);
       return thunkAPI.rejectWithValue(
-        errorMsg || 'Something went wrong while update employee.'
+        error.response?.data?.message ||
+          'Something went wrong while update employee.'
       );
     }
   }

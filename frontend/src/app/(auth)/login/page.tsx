@@ -21,6 +21,7 @@ import { loginUser } from '@/lib/store/features/user/authSlice';
 import { redirect, useRouter } from 'next/navigation';
 import { useAppDispatch, useAppSelector } from '@/lib/hooks/hooks';
 import Link from 'next/link';
+import { ThemeToggler } from '@/components/custom/Theme/ThemeToggler';
 const FormSchema = z.object({
   identifier: z.string().trim().min(2, {
     message: 'Identifier must be 2 characters.',
@@ -78,7 +79,11 @@ export default function Login() {
         onSubmit={form.handleSubmit(onSubmit)}
         className="w-screen space-y-4 mx-auto bg-card p-9 h-screen md:w-2/5 md:h-2/3 md:mt-20 md:rounded-lg"
       >
-        <h2 className="mt-0 font-extrabold text-xl">Login to your account</h2>
+        <div className="flex justify-between">
+          <h2 className="mt-0 font-extrabold text-xl">Login to your account</h2>
+          <ThemeToggler />
+        </div>
+
         <div className="mt-2 p-0">
           <span className="font-semibold text-sm text-foreground">
             Don&#39;t have an account?{' '}
@@ -102,7 +107,7 @@ export default function Login() {
                 <Input
                   placeholder="username or email"
                   {...field}
-                  className="bg-input"
+                  className="bg-secondary"
                 />
               </FormControl>
               <FormMessage />
@@ -123,7 +128,7 @@ export default function Login() {
                     type={passwordVisible ? 'text' : 'password'}
                     placeholder="password"
                     {...field}
-                    className="bg-input"
+                    className="bg-secondary dark:bg-input"
                   />
                 </FormControl>
                 <button

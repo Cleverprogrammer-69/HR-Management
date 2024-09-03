@@ -1,4 +1,3 @@
-import { extractErrorMessage } from '@/lib/extractErrorMsg';
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 import type { DepartmentResponse } from '@/types/departmentTypes';
@@ -13,23 +12,23 @@ const initialState: InitialState = {
   departmentStatus: 'idle',
   departmentError: null,
 };
-const getAccessToken = () => Cookies.get("accessToken")
+const getAccessToken = () => Cookies.get('accessToken');
 export const getAllDepartments = createAsyncThunk(
   'department/getAll',
   async (_, thunkAPI) => {
-    const token = getAccessToken()
+    const token = getAccessToken();
     try {
       const response = await axios.get(`${process.env.HR_API_V1}/department`, {
         withCredentials: true,
-        headers:{
-          Authorization: `Bearer ${token}`
-        }
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       });
       return response.data;
     } catch (error: any) {
-      const errorMsg = extractErrorMessage(error.response?.data);
       return thunkAPI.rejectWithValue(
-        errorMsg || 'Something went wrong while fetching all departments.'
+        error.response?.data?.message ||
+          'Something went wrong while fetching all departments.'
       );
     }
   }
@@ -37,22 +36,23 @@ export const getAllDepartments = createAsyncThunk(
 export const newDepartment = createAsyncThunk(
   'department/new',
   async (data: any, thunkAPI) => {
-    const token = getAccessToken()
+    const token = getAccessToken();
     try {
       const response = await axios.post(
         `${process.env.HR_API_V1}/department`,
         data,
-        { withCredentials: true,
-          headers:{
-            Authorization: `Bearer ${token}`
-          }
-         }
+        {
+          withCredentials: true,
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
       );
       return response.data;
     } catch (error: any) {
-      const errorMsg = extractErrorMessage(error.response?.data);
       return thunkAPI.rejectWithValue(
-        errorMsg || 'Something went wrong while while creating new department.'
+        error.response?.data?.message ||
+          'Something went wrong while while creating new department.'
       );
     }
   }
@@ -61,21 +61,22 @@ export const newDepartment = createAsyncThunk(
 export const getOneDepartment = createAsyncThunk(
   'department/getOne',
   async (departmentId: string | string[], thunkAPI) => {
-    const token = getAccessToken()
+    const token = getAccessToken();
     try {
       const response = await axios.get(
         `${process.env.HR_API_V1}/department/${departmentId}`,
-        { withCredentials: true,
-          headers:{
-            Authorization: `Bearer ${token}`
-          }
-         }
+        {
+          withCredentials: true,
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
       );
       return response.data;
     } catch (error: any) {
-      const errorMsg = extractErrorMessage(error.response?.data);
       return thunkAPI.rejectWithValue(
-        errorMsg || 'Something went wrong while while creating new department.'
+        error.response?.data?.message ||
+          'Something went wrong while while creating new department.'
       );
     }
   }
@@ -84,21 +85,22 @@ export const getOneDepartment = createAsyncThunk(
 export const deleteOneDepartment = createAsyncThunk(
   'department/deleteOne',
   async (departmentId: string | string[], thunkAPI) => {
-    const token = getAccessToken()
+    const token = getAccessToken();
     try {
       const response = await axios.delete(
         `${process.env.HR_API_V1}/department/${departmentId}`,
-        { withCredentials: true,
-          headers:{
-            Authorization: `Bearer ${token}`
-          }
-         }
+        {
+          withCredentials: true,
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
       );
       return response.data;
     } catch (error: any) {
-      const errorMsg = extractErrorMessage(error.response?.data);
       return thunkAPI.rejectWithValue(
-        errorMsg || 'Something went wrong while deleting department.'
+        error.response?.data?.message ||
+          'Something went wrong while deleting department.'
       );
     }
   }
@@ -107,23 +109,24 @@ export const deleteOneDepartment = createAsyncThunk(
 export const updateDepartment = createAsyncThunk(
   'department/update',
   async (data: any, thunkAPI) => {
-    const token = getAccessToken()
+    const token = getAccessToken();
     const { departmentId, departmentData } = data;
     try {
       const response = await axios.patch(
         `${process.env.HR_API_V1}/department/${departmentId}`,
         departmentData,
-        { withCredentials: true,
-          headers:{
-            Authorization: `Bearer ${token}`
-          }
-         }
+        {
+          withCredentials: true,
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
       );
       return response.data;
     } catch (error: any) {
-      const errorMsg = extractErrorMessage(error.response.data);
       return thunkAPI.rejectWithValue(
-        errorMsg || 'Something went wrong while update department.'
+        error.response?.data?.message ||
+          'Something went wrong while update department.'
       );
     }
   }

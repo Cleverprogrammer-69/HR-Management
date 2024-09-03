@@ -18,6 +18,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { useRouter } from 'next/navigation';
 import { Redirect } from 'next';
 import { toast } from '../ui/use-toast';
+import { ThemeToggler } from './Theme/ThemeToggler';
 
 export default function Navbar() {
   const dispatch = useAppDispatch()
@@ -42,7 +43,7 @@ export default function Navbar() {
     
   }
   return (
-    <nav className="fixed w-full bg-card dark:bg-background py-2 px-3 flex justify-between items-center z-50">
+    <nav className="fixed w-full bg-card py-2 px-3 flex justify-between items-center z-50">
       <button className="text-foreground" onClick={handleToggleSideBar}>
         {sideBarOpen ? (
           <ArrowLeftFromLine className="text-destructive" />
@@ -57,6 +58,7 @@ export default function Navbar() {
       </Link>
 
       <div className="flex space-x-4">
+        <ThemeToggler />
         <DropdownMenu>
           <DropdownMenuTrigger className='focus:outline-none'>
             <Avatar>

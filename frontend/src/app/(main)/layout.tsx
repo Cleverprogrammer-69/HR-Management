@@ -2,10 +2,11 @@
 import React from 'react';
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
-import StoreProvider from './StoreProvider';
+import StoreProvider from '@/components/custom/StoreProvider';
 import './globals.css';
 import ClientLayout from '@/components/custom/ClientLayout';
 import { Toaster } from '@/components/ui/toaster';
+import { ThemeProvider } from '@/components/custom/Theme/ThemeProvider';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -20,17 +21,22 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    
-      <StoreProvider>
-        <html lang="en">
-          <body className={inter.className}>
+    <StoreProvider>
+      <html lang="en">
+        <body className={inter.className}>
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            disableTransitionOnChange
+          >
             <ClientLayout>
               {children}
               <Toaster />
             </ClientLayout>
-          </body>
-        </html>
-      </StoreProvider>
-    
+          </ThemeProvider>
+        </body>
+      </html>
+    </StoreProvider>
   );
 }

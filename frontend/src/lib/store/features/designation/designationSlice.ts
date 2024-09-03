@@ -1,4 +1,3 @@
-import { extractErrorMessage } from '@/lib/extractErrorMsg';
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 import type { DesignationResponse } from '@/types/designationTypes';
@@ -27,9 +26,9 @@ export const getAllDesignations = createAsyncThunk(
       });
       return response.data;
     } catch (error: any) {
-      const errorMsg = extractErrorMessage(error.response?.data);
       return thunkAPI.rejectWithValue(
-        errorMsg || 'Something went wrong while fetching all designations.'
+        error.response?.data?.message ||
+          'Something went wrong while fetching all designations.'
       );
     }
   }
@@ -51,9 +50,9 @@ export const newDesignation = createAsyncThunk(
       );
       return response.data;
     } catch (error: any) {
-      const errorMsg = extractErrorMessage(error.response?.data);
       return thunkAPI.rejectWithValue(
-        errorMsg || 'Something went wrong while while creating new designation.'
+        error.response?.data?.message ||
+          'Something went wrong while while creating new designation.'
       );
     }
   }
@@ -75,9 +74,9 @@ export const getOneDesignation = createAsyncThunk(
       );
       return response.data;
     } catch (error: any) {
-      const errorMsg = extractErrorMessage(error.response?.data);
       return thunkAPI.rejectWithValue(
-        errorMsg || 'Something went wrong while while creating new designation.'
+        error.response?.data?.message ||
+          'Something went wrong while while creating new designation.'
       );
     }
   }
@@ -99,9 +98,9 @@ export const deleteOneDesignation = createAsyncThunk(
       );
       return response.data;
     } catch (error: any) {
-      const errorMsg = extractErrorMessage(error.response?.data);
       return thunkAPI.rejectWithValue(
-        errorMsg || 'Something went wrong while deleting designation.'
+        error.response?.data?.message ||
+          'Something went wrong while deleting designation.'
       );
     }
   }
@@ -125,9 +124,9 @@ export const updateDesignation = createAsyncThunk(
       );
       return response.data;
     } catch (error: any) {
-      const errorMsg = extractErrorMessage(error.response.data);
       return thunkAPI.rejectWithValue(
-        errorMsg || 'Something went wrong while update designation.'
+        error.response?.data?.message ||
+          'Something went wrong while update designation.'
       );
     }
   }

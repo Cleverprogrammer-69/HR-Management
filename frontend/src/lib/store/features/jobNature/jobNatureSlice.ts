@@ -1,4 +1,3 @@
-import { extractErrorMessage } from '@/lib/extractErrorMsg';
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 import type { JobNatureResponse } from '@/types/jobNatureTypes';
@@ -27,9 +26,9 @@ export const getAllJobNatures = createAsyncThunk(
       });
       return response.data;
     } catch (error: any) {
-      const errorMsg = extractErrorMessage(error.response?.data);
       return thunkAPI.rejectWithValue(
-        errorMsg || 'Something went wrong while fetching all jobnatures.'
+        error.response?.data?.message ||
+          'Something went wrong while fetching all jobnatures.'
       );
     }
   }
@@ -51,9 +50,9 @@ export const newJobNature = createAsyncThunk(
       );
       return response.data;
     } catch (error: any) {
-      const errorMsg = extractErrorMessage(error.response?.data);
       return thunkAPI.rejectWithValue(
-        errorMsg || 'Something went wrong while while creating new jobNature.'
+        error.response?.data?.message ||
+          'Something went wrong while while creating new jobNature.'
       );
     }
   }
@@ -70,9 +69,9 @@ export const getOneJobNature = createAsyncThunk(
       );
       return response.data;
     } catch (error: any) {
-      const errorMsg = extractErrorMessage(error.response?.data);
       return thunkAPI.rejectWithValue(
-        errorMsg || 'Something went wrong while while creating new jobNature.'
+        error.response?.data?.message ||
+          'Something went wrong while while creating new jobNature.'
       );
     }
   }
@@ -94,9 +93,9 @@ export const deleteOneJobNature = createAsyncThunk(
       );
       return response.data;
     } catch (error: any) {
-      const errorMsg = extractErrorMessage(error.response?.data);
       return thunkAPI.rejectWithValue(
-        errorMsg || 'Something went wrong while deleting jobNature.'
+        error.response?.data?.message ||
+          'Something went wrong while deleting jobNature.'
       );
     }
   }
@@ -120,9 +119,9 @@ export const updateJobNature = createAsyncThunk(
       );
       return response.data;
     } catch (error: any) {
-      const errorMsg = extractErrorMessage(error.response.data);
       return thunkAPI.rejectWithValue(
-        errorMsg || 'Something went wrong while update jobNature.'
+        error.response?.data?.message ||
+          'Something went wrong while update jobNature.'
       );
     }
   }
