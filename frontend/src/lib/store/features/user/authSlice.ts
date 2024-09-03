@@ -35,7 +35,6 @@ export const loginUser = createAsyncThunk(
 
       return response.data;
     } catch (error: any) {
-      console.log(error.response.data.message);
       return thunkAPI.rejectWithValue(
         error.response?.data?.message || 'An error occurred during login.'
       );
