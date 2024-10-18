@@ -23,7 +23,9 @@ const createJobNature = asyncHandler(async (req, res) => {
   }
   res
     .status(201)
-    .json(new ApiResponse(201, newJobNature, "Successfully created new JobNature."));
+    .json(
+      new ApiResponse(201, newJobNature, "Successfully created new JobNature.")
+    );
 });
 
 const getAllJobNatures = asyncHandler(async (req, res) => {
@@ -32,13 +34,18 @@ const getAllJobNatures = asyncHandler(async (req, res) => {
 
   // check if i have res
   if (!jobNatures) {
-    throw new ApiError(500, "Something went wrong while fetching all jobNatures.");
+    throw new ApiError(
+      500,
+      "Something went wrong while fetching all jobNatures."
+    );
   }
 
   // res
   res
     .status(200)
-    .json(new ApiResponse(200, jobNatures, "Successfully fetch all jobNatures."));
+    .json(
+      new ApiResponse(200, jobNatures, "Successfully fetch all jobNatures.")
+    );
 });
 
 const getOneJobNature = asyncHandler(async (req, res) => {
@@ -58,7 +65,9 @@ const getOneJobNature = asyncHandler(async (req, res) => {
   // res
   res
     .status(200)
-    .json(new ApiResponse(200, [jobNatureFound], "JobNature found successfully."));
+    .json(
+      new ApiResponse(200, [jobNatureFound], "JobNature found successfully.")
+    );
 });
 
 const updateJobNature = asyncHandler(async (req, res) => {
@@ -89,7 +98,9 @@ const updateJobNature = asyncHandler(async (req, res) => {
   // res
   res
     .status(200)
-    .json(new ApiResponse(200, updatedJobNature, "JobNature updated successfully."));
+    .json(
+      new ApiResponse(200, updatedJobNature, "JobNature updated successfully.")
+    );
 });
 
 const deleteJobNature = asyncHandler(async (req, res) => {
@@ -105,7 +116,11 @@ const deleteJobNature = asyncHandler(async (req, res) => {
   res
     .status(200)
     .json(
-      new ApiResponse(200, deletedJobNature, "Successfully deleted the JobNature.")
+      new ApiResponse(
+        200,
+        deletedJobNature,
+        "Successfully deleted the JobNature."
+      )
     );
 });
 
